@@ -16,7 +16,7 @@ before_script:
   - docker exec bookbnb-payment_web bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;'
 
 scripts:
-  - docker exec bookbnb-userserver_web npm test 
+  - docker exec bookbnb-payment_web npm test
 
 after_success:
   - docker exec -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" 
