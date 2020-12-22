@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: bookbnb-payment_web
+
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      
+    volumes:
+      - ./:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+
+    ports:
+      - 5000:8080 # host=4000 --> docker=8080
+
+    depends_on:
+      - db # first execute database
+
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DATABASE_URL: sqlite:///./app.db
+
+
+  db:
+    container_name: bookbnb-payment_db
+
+    image: postgres:12.1-alpine
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+    environment:
+      - POSTGRES_USER=payment
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=payment_db_dev
+
+volumes:
+  node_modules:
+  postgres_data:

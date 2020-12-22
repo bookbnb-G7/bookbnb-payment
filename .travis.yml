@@ -1,0 +1,53 @@
+language: node_js
+
+node_js:
+  - "10"
+
+services:
+  - docker
+
+
+#------------------------------------testing------------------------------------#
+before_script:
+  - docker-compose build
+  - docker-compose up -d
+
+  # check that db is connected
+  - docker exec bookbnb-userserver_web bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;'
+
+scripts:
+  - docker exec bookbnb-userserver_web npm test 
+
+after_success:
+  - docker exec -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" 
+    -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" -e COVERALLS_GIT_BRANCH="$TRAVIS_BRANCH" 
+    -e COVERALLS_SERVICE_NAME="$COVERALLS_SERVICE_NAME" bookbnb-userserver_web npm run coveralls
+  
+#--------------------------------------------------------------------------------#
+
+
+
+#------------------------------------deploy---------------------------------------#
+before_install:
+  # install heroku CLI
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+
+  # login to docker registries (dockerhub + heroku)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
+
+install:
+
+deploy:
+  - provider: script
+
+    script:
+      docker build . -t facutorraca/bookbnb-userserver
+      docker tag facutorraca/bookbnb-userserver registry.heroku.com/$HEROKU_APP_NAME/web;
+      docker push facutorraca/bookbnb-userserver;
+      heroku container:push web --app $HEROKU_APP_NAME;
+      heroku container:release web --app $HEROKU_APP_NAME;
+
+    on:
+      branch: master
+#--------------------------------------------------------------------------------#
