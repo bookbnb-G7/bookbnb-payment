@@ -49,6 +49,8 @@ function getRoomRoute({ services, config }) {
   };
 }
 
+
+
 module.exports = [
   postIdentityRoute,
   getIdentityRoute,
