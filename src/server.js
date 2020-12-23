@@ -1,6 +1,6 @@
 const config = require('./config');
-const services = require('./services/services')({ config });
 const routes = require('./routes');
+const services = require('./services/services')({ config });
 
 // Require the framework and instantiate it
 const fastify = require('fastify')({ logger: true });
@@ -21,4 +21,4 @@ const start = async () => {
   }
 };
 
-await start();
+start();
