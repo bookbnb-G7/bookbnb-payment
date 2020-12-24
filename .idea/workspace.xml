@@ -2,8 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13268be8-9605-463e-b50b-b5345be28c11" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/handlers/createWalletHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handlers/createIdentityHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/createIntentBookHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handlers/createRoomHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/createRoomHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handlers/getIdentitiesHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/getAllWalletsHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handlers/getIdentityHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/handlers/getWalletHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/contractInteraction.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/contractInteraction.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/identities.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/identities.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,13 +35,15 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/handlers" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="inlay.hints" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/handlers" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -47,6 +60,8 @@
       <updated>1608675152627</updated>
       <workItem from="1608675158310" duration="2049000" />
       <workItem from="1608680180254" duration="3746000" />
+      <workItem from="1608722317294" duration="5216000" />
+      <workItem from="1608777017537" duration="10944000" />
     </task>
     <servers />
   </component>
@@ -64,5 +79,29 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes.js</url>
+          <line>77</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes.js</url>
+          <line>30</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes.js</url>
+          <line>60</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -3,18 +3,18 @@ function schema(config) {
     params: {
       type: 'object',
       properties: {
-        id: {
+        uuid: {
           type: 'integer',
         },
       },
     },
-    required: ['id'],
+    required: ['uuid'],
   };
 }
 
 function handler({ identityService }) {
   return async function (req, reply) {
-    const body = await identityService.createIdentity();
+    const body = await identityService.createWallet(req.body.uuid);
     return reply.code(200).send(body);
   };
 }

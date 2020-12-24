@@ -6,7 +6,7 @@ function schema(config) {
 
 function handler({ identityService }) {
   return async function (req, reply) {
-    const body = await identityService.getIdentities();
+    const body = await identityService.getAllWallets();
     return reply.code(200).send(body);
   };
 }

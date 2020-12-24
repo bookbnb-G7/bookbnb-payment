@@ -1,20 +1,20 @@
-function schema(config) {
+function schema(_config) {
   return {
     params: {
       type: 'object',
       properties: {
-        id: {
+        uuid: {
           type: 'integer',
         },
       },
     },
-    required: ['id'],
+    required: ['uuid'],
   };
 }
 
 function handler({ identityService }) {
   return async function (req, reply) {
-    const body = await identityService.getIdentity(req.params.id);
+    const body = await identityService.getWallet(req.params.uuid);
     reply.code(200).send(body);
   };
 }

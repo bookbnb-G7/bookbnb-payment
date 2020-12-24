@@ -1,40 +1,47 @@
-const getIdentity = require('./handlers/getIdentityHandler');
-const getIdentities = require('./handlers/getIdentitiesHandler');
-const createIdentity = require('./handlers/createIdentityHandler');
-const createRoom = require('./handlers/createRoomHandler');
+const getWallet = require('./handlers/getWalletHandler');
+const getWallets = require('./handlers/getAllWalletsHandler');
+const createWallet = require('./handlers/createWalletHandler');
+
 const getRoom = require('./handlers/getRoomHandler');
+const createRoom = require('./handlers/createRoomHandler');
 
-function getIdentityRoute({ services, config }) {
+const rejectBook = require('./handlers/rejectBookHandler');
+const acceptBook = require('./handlers/acceptBookHandler');
+const createIntentBook = require('./handlers/createIntentBookHandler');
+
+
+function getWalletRoute({ services, config }) {
   return {
     method: 'GET',
-    url: '/identity/:id',
-    schema: getIdentity.schema(config),
-    handler: getIdentity.handler({ config, ...services }),
+    url: '/wallets/:uuid',
+    schema: getWallet.schema(config),
+    handler: getWallet.handler({ config, ...services }),
   };
 }
 
-function getIdentitiesRoute({ services, config }) {
+function getAllWalletsRoute({ services, config }) {
   return {
     method: 'GET',
-    url: '/identity',
-    schema: getIdentities.schema(config),
-    handler: getIdentities.handler({ config, ...services }),
+    url: '/wallets',
+    schema: getWallets.schema(config),
+    handler: getWallets.handler({ config, ...services }),
   };
 }
 
-function postIdentityRoute({ services, config }) {
+function createWalletRoute({ services, config }) {
   return {
     method: 'POST',
-    url: '/identity',
-    schema: createIdentity.schema(config),
-    handler: createIdentity.handler({ config, ...services }),
+    url: '/wallets',
+    schema: createWallet.schema(config),
+    handler: createWallet.handler({ config, ...services }),
   };
 }
+
 
 function createRoomRoute({ services, config }) {
   return {
     method: 'POST',
-    url: '/room',
+    url: '/rooms',
     schema: createRoom.schema(config),
     handler: createRoom.handler({ config, ...services }),
   };
@@ -43,18 +50,47 @@ function createRoomRoute({ services, config }) {
 function getRoomRoute({ services, config }) {
   return {
     method: 'GET',
-    url: '/room/:id',
+    url: '/rooms/:id',
     schema: getRoom.schema(config),
     handler: getRoom.handler({ config, ...services }),
   };
 }
 
 
+function rejectBookRoute({ services, config }) {
+  return {
+    method: 'POST',
+    url: '/books/:id',
+    schema: rejectBook.schema(config),
+    handler: rejectBook.handler({ config, ...services }),
+  };
+}
+
+function acceptBookRoute({ services, config }) {
+  return {
+    method: 'POST',
+    url: '/books/:id',
+    schema: acceptBook.schema(config),
+    handler: acceptBook.handler({ config, ...services }),
+  };
+}
+
+function createIntentBookRoute({ services, config }) {
+  return {
+    method: 'GET',
+    url: '/books',
+    schema: createIntentBook.schema(config),
+    handler: createIntentBook.handler({ config, ...services }),
+  };
+}
 
 module.exports = [
-  postIdentityRoute,
-  getIdentityRoute,
-  getIdentitiesRoute,
+  getWalletRoute,
+  getAllWalletsRoute,
+  createWalletRoute,
   createRoomRoute,
   getRoomRoute,
+  createIntentBookRoute,
+  acceptBookRoute,
+  rejectBookRoute
 ];
