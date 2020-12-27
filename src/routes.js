@@ -5,84 +5,85 @@ const createWallet = require('./handlers/createWalletHandler');
 const getRoom = require('./handlers/getRoomHandler');
 const createRoom = require('./handlers/createRoomHandler');
 
-const rejectBook = require('./handlers/rejectBookHandler');
-const acceptBook = require('./handlers/acceptBookHandler');
+const rejectBooking = require('./handlers/rejectBookingHandler');
+const acceptBooking = require('./handlers/acceptBookingHandler');
 const createIntentBook = require('./handlers/createIntentBookHandler');
 
-
-function getWalletRoute({ services, config }) {
+function getWalletRoute({ controllers, config }) {
   return {
     method: 'GET',
     url: '/wallets/:uuid',
     schema: getWallet.schema(config),
-    handler: getWallet.handler({ config, ...services }),
+    handler: getWallet.handler({ config, ...controllers }),
   };
 }
 
-function getAllWalletsRoute({ services, config }) {
+function getAllWalletsRoute({ controllers, config }) {
   return {
     method: 'GET',
     url: '/wallets',
     schema: getWallets.schema(config),
-    handler: getWallets.handler({ config, ...services }),
+    handler: getWallets.handler({ config, ...controllers }),
   };
 }
 
-function createWalletRoute({ services, config }) {
+function createWalletRoute({ controllers, config }) {
   return {
     method: 'POST',
     url: '/wallets',
     schema: createWallet.schema(config),
-    handler: createWallet.handler({ config, ...services }),
+    handler: createWallet.handler({ config, ...controllers }),
   };
 }
 
 
-function createRoomRoute({ services, config }) {
+function createRoomRoute({ controllers, config }) {
   return {
     method: 'POST',
     url: '/rooms',
     schema: createRoom.schema(config),
-    handler: createRoom.handler({ config, ...services }),
+    handler: createRoom.handler({ config, ...controllers }),
   };
 }
 
-function getRoomRoute({ services, config }) {
+function getRoomRoute({ controllers, config }) {
   return {
     method: 'GET',
     url: '/rooms/:id',
     schema: getRoom.schema(config),
-    handler: getRoom.handler({ config, ...services }),
+    handler: getRoom.handler({ config, ...controllers }),
   };
 }
 
 
-function rejectBookRoute({ services, config }) {
+
+function rejectBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/books/:id',
-    schema: rejectBook.schema(config),
-    handler: rejectBook.handler({ config, ...services }),
+    url: '/bookings/reject/:id',
+    schema: rejectBooking.schema(config),
+    handler: rejectBooking.handler({ config, ...controllers }),
   };
 }
 
-function acceptBookRoute({ services, config }) {
+function acceptBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/books/:id',
-    schema: acceptBook.schema(config),
-    handler: acceptBook.handler({ config, ...services }),
+    url: '/bookings/accept/:id',
+    schema: acceptBooking.schema(config),
+    handler: acceptBooking.handler({ config, ...controllers }),
   };
 }
 
-function createIntentBookRoute({ services, config }) {
+function createIntentBookRoute({ controllers, config }) {
   return {
-    method: 'GET',
-    url: '/books',
+    method: 'POST',
+    url: '/bookings',
     schema: createIntentBook.schema(config),
-    handler: createIntentBook.handler({ config, ...services }),
+    handler: createIntentBook.handler({ config, ...controllers }),
   };
 }
+
 
 module.exports = [
   getWalletRoute,

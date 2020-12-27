@@ -7,18 +7,18 @@ function schema(_config) {
           type: 'integer',
         },
         price: {
-          type: 'number',
+          type: 'integer',
         },
       },
     },
-    required: ['creatorId', 'price'],
+    required: ['ownerId', 'price'],
   };
 }
 
-function handler({ contractInteraction, identityService }) {
+function handler({ roomController, walletController }) {
   return async function (req) {
-    const wallet = await identityService.getWeb3WithWallet(req.body.ownerId);
-    return contractInteraction.createRoom(wallet, req.body.price, req.body.ownerId);
+    const wallet = await walletController.getWeb3WithWallet(req.body.ownerId);
+    return roomController.createRoom(wallet, req.body.price, req.body.ownerId);
   };
 }
 

@@ -1,4 +1,4 @@
-function schema(config) {
+function schema(_config) {
   return {
     params: {
       type: 'object',
@@ -12,10 +12,10 @@ function schema(config) {
   };
 }
 
-function handler({ identityService }) {
+function handler({ walletController }) {
   return async function (req, reply) {
-    const body = await identityService.createWallet(req.body.uuid);
-    return reply.code(200).send(body);
+    const wallet = await walletController.createWallet(req.body.uuid);
+    return reply.code(200).send(wallet);
   };
 }
 

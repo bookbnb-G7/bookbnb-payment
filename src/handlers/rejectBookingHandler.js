@@ -7,7 +7,10 @@ function schema(_config) {
           type: 'integer',
         },
         roomId: {
-          type: 'number',
+          type: 'integer',
+        },
+        ownerId: {
+          type: 'integer',
         },
         dateFrom: {
           type: 'string'
@@ -17,7 +20,7 @@ function schema(_config) {
         }
       },
     },
-    required: ['bookerId', 'roomId', 'dateFrom', 'dateTo'],
+    required: ['bookerId', 'roomId', 'ownerId', 'dateFrom', 'dateTo'],
   };
 }
 
@@ -28,8 +31,8 @@ function handler({ bookingController, walletController }) {
     const dateFrom = new Date(req.body.dateFrom);
     const dateTo = new Date(req.body.dateTo);
 
-    return bookingController.createIntentBook(
-      wallet, req.body.bookerId, req.body.roomId, dateFrom, dateTo
+    return bookingController.rejectBooking(
+      wallet, req.body.ownerId, req.body.bookerId, req.body.roomId, dateFrom, dateTo
     );
   };
 }

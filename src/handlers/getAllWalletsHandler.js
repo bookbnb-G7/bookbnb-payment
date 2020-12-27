@@ -1,13 +1,13 @@
-function schema(config) {
+function schema(_config) {
   return {
     params: {},
   };
 }
 
-function handler({ identityService }) {
+function handler({ walletController }) {
   return async function (req, reply) {
-    const body = await identityService.getAllWallets();
-    return reply.code(200).send(body);
+    const wallets = await walletController.getAllWallets();
+    return reply.code(200).send(wallets);
   };
 }
 

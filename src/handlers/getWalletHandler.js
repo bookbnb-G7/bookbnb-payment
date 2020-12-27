@@ -12,10 +12,10 @@ function schema(_config) {
   };
 }
 
-function handler({ identityService }) {
+function handler({ walletController }) {
   return async function (req, reply) {
-    const body = await identityService.getWallet(req.params.uuid);
-    reply.code(200).send(body);
+    const wallet = await walletController.getWallet(req.params.uuid);
+    reply.code(200).send(wallet);
   };
 }
 
