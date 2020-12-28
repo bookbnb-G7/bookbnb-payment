@@ -13,12 +13,10 @@ const createWallet = ({ config }) => async (uuid) => {
   const web3 = new Web3(provider);
   const currentAccounts = await web3.eth.getAccounts();
 
-  Wallet.create({
+  return await Wallet.create({
     uuid: uuid,
     mnemonic: mnemonic,
     address: currentAccounts[0]
-  }).then((newWallet) => {
-    return newWallet.toJSON();
   });
 };
 
