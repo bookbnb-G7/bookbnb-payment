@@ -1,6 +1,6 @@
+const database = require('./db');
 const config = require('./config');
 const routes = require('./routes');
-const { database } = require('./db');
 const controllers = require('./controllers/controllers')({ config });
 
 // Require the framework and instantiate it
@@ -20,4 +20,3 @@ database.sync().then(async () => {
     }
 });
 
-postgres://cufxxezgcvqndq:d98bab48c7933692defa68c206333ecf6095c1ef77f3980b49e20fce14cbc2c3@ec2-54-175-243-75.compute-1.amazonaws.com:5432/d1bkhdnhcuou14
