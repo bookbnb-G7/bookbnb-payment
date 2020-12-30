@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13268be8-9605-463e-b50b-b5345be28c11" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/bin/travisruntests.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/runtests.sh" beforeDir="false" afterPath="$PROJECT_DIR$/bin/runtests.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-entrypoint.dev.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-entrypoint.dev.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/app/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/payment/app/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +38,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/bin" />
     <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/node_modules/mocha" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
@@ -43,6 +47,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/bin" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/handlers" />
     </key>
@@ -88,7 +93,7 @@
       <workItem from="1609046643670" duration="2168000" />
       <workItem from="1609077635447" duration="22244000" />
       <workItem from="1609176486531" duration="21931000" />
-      <workItem from="1609292846208" duration="5899000" />
+      <workItem from="1609292846208" duration="8538000" />
     </task>
     <servers />
   </component>

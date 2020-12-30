@@ -12,7 +12,7 @@ before_script:
   - ENVIRONMENT=testing docker-compose up --build -d
 
   # check that db is connected
-  - docker exec bookbnb-payment_web bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;'
+  - docker exec bookbnb-payment_web sh $TRAVIS_BUILD_DIR/bin/travisruntests.sh
 
 scripts:
   - docker exec bookbnb-payment_web npm test

@@ -20,4 +20,3 @@ database.sync().then(async () => {
     }
 });
 
-module.exports = fastify;
