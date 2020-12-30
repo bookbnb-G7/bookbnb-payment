@@ -49,7 +49,7 @@ function createRoomRoute({ controllers, config }) {
 function getRoomRoute({ controllers, config }) {
   return {
     method: 'GET',
-    url: '/rooms/:id',
+    url: '/rooms/:roomId',
     schema: getRoom.schema(config),
     handler: getRoom.handler({ config, ...controllers }),
   };

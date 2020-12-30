@@ -1,7 +1,8 @@
+const { TransactionStatus } = require('../ultis');
 const { getRoom } = require('../controllers/room.controller');
 const { toWei, getContract, daysBetween } = require('../ultis');
 const { getWallet } = require('../controllers/wallet.controller')
-const { Booking, BookingStatus, TransactionStatus } = require('../models/booking');
+const { Booking, BookingStatus } = require('../models/booking');
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Booking.findOne({where: {transactionHash: transactionHash}}).then((booking) => {

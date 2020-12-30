@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js');
-const BookbnbABI = require('../abi/BnBooking').abi;
+const BookbnbABI = require('../abi/bookbnb-contract.json').abi;
 
 const toWei = (number) => {
   const WEIS_IN_ETHER = new BigNumber(10).pow(18);
@@ -15,8 +15,16 @@ const daysBetween = (initialDate, lastDate) => {
   return timeBetweenDates / (1000 * 3600 * 24);
 };
 
+const TransactionStatus = Object.freeze({
+  "pending": 1,
+  "confirmed": 2,
+  'denied': 3
+});
+
+
 module.exports = {
   toWei,
   getContract,
   daysBetween,
+  TransactionStatus
 }

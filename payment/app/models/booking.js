@@ -7,12 +7,6 @@ const BookingStatus = Object.freeze({
   "rejected": 3
 });
 
-const TransactionStatus = Object.freeze({
-  "pending": 1,
-  "confirmed": 2,
-  'denied': 3
-});
-
 const Booking = database.define('Bookings', {
   id: { type: Sequelize.INTEGER, primaryKey: true },
 
@@ -31,6 +25,5 @@ const Booking = database.define('Bookings', {
 
 module.exports = {
   Booking,
-  BookingStatus,
-  TransactionStatus
+  BookingStatus
 };

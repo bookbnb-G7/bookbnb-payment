@@ -16,9 +16,10 @@ function schema(_config) {
 }
 
 function handler({ roomController, walletController }) {
-  return async function (req) {
+  return async function (req, reply) {
     const wallet = await walletController.getWeb3WithWallet(req.body.ownerId);
-    return roomController.createRoom(wallet, req.body.price, req.body.ownerId);
+    const room = await roomController.createRoom(wallet, req.body.price, req.body.ownerId);
+    return reply.code(201).send(room);
   };
 }
 
