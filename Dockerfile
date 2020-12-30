@@ -5,7 +5,6 @@ FROM node:10
 WORKDIR /usr/src/app
 
 # copy requirements
-COPY ./package.json /usr/src/app/package.json
 COPY ./package-lock.json /usr/src/app/package-lock.json
 
 # Updates packages and install git(required for coveralls)
