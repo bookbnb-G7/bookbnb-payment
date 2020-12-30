@@ -9,7 +9,7 @@ services:
 
 #------------------------------------testing------------------------------------#
 before_script:
-  - ls ${TRAVIS_BUILD_DIR}/bin/travisruntests.sh
+  - ls ${TRAVIS_BUILD_DIR}
   - ENVIRONMENT=testing docker-compose up --build -d
 
 scripts:
