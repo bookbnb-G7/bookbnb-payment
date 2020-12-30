@@ -12,7 +12,7 @@ before_script:
   - ENVIRONMENT=testing docker-compose up --build -d
 
 scripts:
-  - docker exec bookbnb-payment_web sh ${TRAVIS_BUILD_DIR}/bin/travisruntests.sh
+  - docker exec bookbnb-payment_web bash ./$TRAVIS_BUILD_DIR/bin/travisruntests.sh
 
 after_success:
   - docker exec -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" 
