@@ -9,7 +9,6 @@ services:
 
 #------------------------------------testing------------------------------------#
 before_script:
-  - docker-compose build
   - ENVIRONMENT=testing docker-compose up --build -d
 
   # check that db is connected

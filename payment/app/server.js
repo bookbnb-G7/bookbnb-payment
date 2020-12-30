@@ -19,3 +19,5 @@ database.sync().then(async () => {
       process.exit(1);
     }
 });
+
+module.exports = fastify;
