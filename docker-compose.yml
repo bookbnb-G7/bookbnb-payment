@@ -7,20 +7,29 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-      
+
     volumes:
-      - ./:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - ./:/usr/app/app
+      - node_modules:/usr/app/app/node_modules
 
     ports:
       - 5000:8080 # host=4000 --> docker=8080
 
     depends_on:
       - db # first execute database
+      - sc # and execute smart contract
 
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-development}
       DATABASE_URL: sqlite:///./app.db
+
+      # just local testing
+      URL_WSKT: ws://sc:8545
+      URL_NODE: http://sc:8545
+      CTC_ADDR: '0x8f6dFDf796d258f5eA256857BD44AfF61B25d7C9'
+
+    networks:
+      - payments-net
 
 
   db:
@@ -36,6 +45,26 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=payment_db_dev
 
+    networks:
+      - payments-net
+
+
+  sc:
+    container_name: bookbnb-payment_sc
+
+    image: trufflesuite/ganache-cli:latest
+
+    ports:
+      - 8545:8545
+
+    command: -e 100 -s asecretseed -q
+
+    networks:
+      - payments-net
+
 volumes:
   node_modules:
   postgres_data:
+
+networks:
+  payments-net:
