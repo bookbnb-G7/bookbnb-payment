@@ -11,11 +11,8 @@ services:
 before_script:
   - ENVIRONMENT=testing docker-compose up --build -d
 
-  # check that db is connected
-  - docker exec bookbnb-payment_web sh $TRAVIS_BUILD_DIR/bin/travisruntests.sh
-
 scripts:
-  - docker exec bookbnb-payment_web npm test
+  - docker exec bookbnb-payment_web sh ${TRAVIS_BUILD_DIR}/bin/travisruntests.sh
 
 after_success:
   - docker exec -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" 
