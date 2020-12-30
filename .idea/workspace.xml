@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="13268be8-9605-463e-b50b-b5345be28c11" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile.dev" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/app/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/payment/app/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <workItem from="1609046643670" duration="2168000" />
       <workItem from="1609077635447" duration="22244000" />
       <workItem from="1609176486531" duration="21931000" />
-      <workItem from="1609292846208" duration="2281000" />
+      <workItem from="1609292846208" duration="2775000" />
     </task>
     <servers />
   </component>
