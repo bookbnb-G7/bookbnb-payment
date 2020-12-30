@@ -11,7 +11,7 @@ if (ENVIRONMENT === 'production') {
   database = new Sequelize(DATABASE_URL ,{
     dialect: 'postgres',
     protocol: 'postgres',
-    dialectOpt,ions: { ssl: true },
+    dialectOptions: { ssl: true },
     operatorsAliases: Sequelize.Op,
     define: {timestamp: false}
   })
