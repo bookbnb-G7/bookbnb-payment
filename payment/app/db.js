@@ -35,4 +35,4 @@ if (ENVIRONMENT === 'testing') {
   })
 }
 
-module.exports = database;
+module.exports = { database };

@@ -1,6 +1,6 @@
-const database = require('./db');
 const config = require('./config');
 const routes = require('./routes');
+const { database } = require('./db');
 const controllers = require('./controllers/controllers')({ config });
 
 // Require the framework and instantiate it
