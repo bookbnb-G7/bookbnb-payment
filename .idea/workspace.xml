@@ -2,64 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13268be8-9605-463e-b50b-b5345be28c11" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/bin/armagedon.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/runtests.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/server.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/controllers/booking.controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/controllers/controllers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/controllers/room.controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/controllers/wallet.controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/db.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/acceptBookingHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/createIntentBookHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/createRoomHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/createWalletHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/getAllWalletsHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/getRoomHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/getWalletHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/handlers/rejectBookingHandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/models/booking.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/models/room.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/models/wallet.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/routes.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/server.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/app/ultis.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/test/test_all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile.dev" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/BnBooking.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/BnBookingEvents.json" beforeDir="false" afterPath="$PROJECT_DIR$/payment/abi/bookbnb-contract.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/Context.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/Migrations.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/Ownable.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/ReentrancyGuard.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abi/SafeMath.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-entrypoint.dev.sc.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/booking.controller.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/controllers.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/room.controller.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/wallet.controller.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/acceptBookingHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/createIntentBookHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/createRoomHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/createWalletHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/getAllWalletsHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/getRoomHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/getWalletHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handlers/rejectBookingHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/booking.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/room.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/wallet.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ultis.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/app/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/payment/app/routes.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,6 +89,7 @@
       <workItem from="1609046643670" duration="2168000" />
       <workItem from="1609077635447" duration="22244000" />
       <workItem from="1609176486531" duration="21931000" />
+      <workItem from="1609292846208" duration="2281000" />
     </task>
     <servers />
   </component>
@@ -170,7 +116,6 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/payment/app/handlers/getWalletHandler.js</url>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

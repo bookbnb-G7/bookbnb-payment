@@ -56,7 +56,6 @@ function getRoomRoute({ controllers, config }) {
 }
 
 
-
 function rejectBookRoute({ controllers, config }) {
   return {
     method: 'POST',
