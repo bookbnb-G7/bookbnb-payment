@@ -4,7 +4,7 @@
   "description": "BookBnB service to interact with the BookBnB Smart Contract",
   "main": "server.js",
   "scripts": {
-    "test": "nyc mocha payment/test --color --recursive --exit",
+    "test": "nyc mocha payment/test --color --recursive",
     "start": "node payment/app/server.js"
   },
   "author": "gonzalpetraglia@gmail.com",

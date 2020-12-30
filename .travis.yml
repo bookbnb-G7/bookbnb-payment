@@ -10,7 +10,7 @@ services:
 #------------------------------------testing------------------------------------#
 before_script:
   - docker-compose build
-  - ENVIRONMENT=testing docker-compose up -d
+  - ENVIRONMENT=testing docker-compose up --build -d
 
   # check that db is connected
   - docker exec bookbnb-payment_web bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;'
