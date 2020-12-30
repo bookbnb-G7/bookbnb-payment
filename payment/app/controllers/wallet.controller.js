@@ -17,7 +17,8 @@ const createWallet = ({ config }) => async (uuid) => {
   // creates new account if mnemonic does not exist
   // or retrieve if the accounts if mnemonic exists
 
-  const eventProvider = new Web3.providers.WebsocketProvider('ws://sc:8545');
+  const eventProvider = new Web3.providers
+    .WebsocketProvider(config.urlWebSocket);
 
   let provider = new HDWalletProvider({
     mnemonic: { phrase: mnemonicPhrase },
@@ -50,7 +51,8 @@ const getWallet = async (uuid) => {
 const getWalletWithWeb3 = ({ config }) => async (uuid) => {
   let wallet = await Wallet.findOne({ where: {uuid: uuid} });
 
-  const eventProvider = new Web3.providers.WebsocketProvider('ws://sc:8545');
+  const eventProvider = new Web3.providers
+    .WebsocketProvider(config.urlWebSocket);
 
   const provider = new HDWalletProvider({
     mnemonic: { phrase: wallet['dataValues'].mnemonic },
