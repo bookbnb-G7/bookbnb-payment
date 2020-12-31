@@ -25,8 +25,13 @@ function handler({ bookingController, walletController }) {
   return async function (req) {
     const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
-    const dateFrom = new Date(req.body.dateFrom);
-    const dateTo = new Date(req.body.dateTo);
+    let dateFromSplit = req.body.dateFrom.split("-");
+    let dateToSplit = req.body.dateFrom.split("-");
+
+    // day month year
+
+    const dateFrom = new Date(dateFromSplit[2], dateFromSplit[1], dateFromSplit[0]);
+    const dateTo = new Date(dateToSplit[2], dateToSplit[1], dateToSplit[0]);
 
     return bookingController.createIntentBook(
       wallet, req.body.bookerId, req.body.roomId, dateFrom, dateTo

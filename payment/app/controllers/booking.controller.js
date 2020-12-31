@@ -58,17 +58,17 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   console.log(bookingPrice);
 
   console.log('dateFrom');
-  console.log(dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear());
+  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
 
   console.log('dateTo');
-  console.log(dateTo.getDay(), dateTo.getMonth(), dateTo.getFullYear());
+  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
 
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
       roomId - 1,
-      dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDay(), dateTo.getMonth(), dateTo.getFullYear()
+      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
     )
     .send({
       from: bookerWallet[0],
