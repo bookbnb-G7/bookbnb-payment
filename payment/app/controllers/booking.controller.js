@@ -55,6 +55,9 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   const bookingPrice = targetRoom.price * days;
 
   console.log('dateFrom');
+  console.log(bookingPrice);
+
+  console.log('dateFrom');
   console.log(dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear());
 
   console.log('dateTo');
@@ -62,8 +65,8 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
 
 
   return new Promise((resolve, reject) => {
-    bookbnbContract.methods.intentBookingBatch(
-      roomId,
+    bookbnbContract['methods'].intentBookingBatch(
+      roomId - 1,
       dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDay(), dateTo.getMonth(), dateTo.getFullYear()
     )
