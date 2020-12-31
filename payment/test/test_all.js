@@ -97,7 +97,7 @@ describe('Room',() => {
   })
 
   it('is possible to create another room', (done) => {
-    const roomPayload = { ownerId: 2, price: 1000 }
+    const roomPayload = { ownerId: 2, price: 10 }
 
     chai.request(url)
       .post('/rooms')
@@ -154,5 +154,37 @@ describe('Room',() => {
   })
 })
 
+describe('Bookings', () => {
+  it('should return a new booking when created', (done) => {
+    const bookingPayload = {
+      bookerId: 1,
+      roomId: 2,
+      dateFrom: '01-01-2021',
+      dateTo: '04-01-2021'
+    }
 
+    // user 1 books room 2,
+    // which belongs to user 2.
 
+    // price(room 2) = 2
+    // 5 days * price(roomId) == 10
+
+    chai.request(url)
+      .post('/bookings')
+      .send(bookingPayload)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.have.property('id');
+        expect(res.body).to.have.property('price');
+        expect(res.body.price).to.be.eql(10);
+        expect(res.body).to.have.property('roomId');
+        expect(res.body).to.have.property('bookerId');
+        expect(res.body).to.have.property('dateFrom');
+        expect(res.body).to.have.property('dateTo');
+        expect(res.body).to.have.property('bookingStatus');
+        expect(res.body).to.have.property('transactionStatus');
+        expect(res.body).to.have.property('transactionHash');
+        done();
+      })
+  })
+})
