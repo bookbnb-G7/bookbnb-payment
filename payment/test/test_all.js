@@ -57,31 +57,4 @@ describe('create a new room',() => {
   })
 })
 
-describe('create a new room booking',() => {
-  it('should return a new booking when created', (done) => {
-    const bookingPayload = {
-      roomId: 1,
-      bookerId: 1,
-      dateFrom: '2021-01-05',
-      dateTo: '2021-01-08'
-    }
 
-    chai.request(url)
-      .post('/bookings')
-      .send(bookingPayload)
-      .end((err, res) => {
-
-        console.log(res.body);
-
-        expect(res).to.have.status(201);
-        expect(res.body).to.have.property('price');
-        expect(res.body).to.have.property('roomId');
-        expect(res.body).to.have.property('dateFrom');
-        expect(res.body).to.have.property('dateTo');
-        expect(res.body).to.have.property('bookingStatus');
-        expect(res.body).to.have.property('transactionStatus');
-        expect(res.body).to.have.property('transactionHash')
-        done();
-      });
-  })
-})

@@ -48,8 +48,8 @@ const _getWallet = async (uuid) => {
 const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom, dateTo) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const bookerWallet = _getWallet(bookerId);
-  const targetRoom = _getRoom(roomId);
+  const bookerWallet = await web3.eth.getAccounts();
+  const targetRoom = await _getRoom(roomId);
 
   const days = daysBetween(dateFrom, dateTo);
   const bookingPrice = targetRoom.price * days;
@@ -61,7 +61,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
       dateTo.getDay(), dateTo.getMonth(), dateTo.getFullYear()
     )
     .send({
-      from: bookerWallet.address,
+      from: bookerWallet[0],
       value: toWei(bookingPrice)
     })
     .on('transactionHash', (hash) => {

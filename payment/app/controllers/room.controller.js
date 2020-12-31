@@ -2,10 +2,10 @@ const { TransactionStatus } = require('../ultis');
 const { Room } = require('../models/room');
 const { getContract, toWei } = require('../ultis')
 
-const _changeTransactionStatus = async (transactionHash, newStatus, roomId) => {
+const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Room.findOne({where: {transactionHash: transactionHash}}).then((room) => {
     if (room) {
-      room.update({transactionStatus: newStatus, roomId: roomId}).then(() => {
+      room.update({transactionStatus: newStatus}).then(() => {
         return true;
       });
     }
@@ -34,9 +34,8 @@ const createRoom = ({ config }) => async (web3, price, ownerId) => {
       .on('receipt', (r) => {
         console.log('receipt: ', r);
         if (r.events.RoomCreated) {
-          const { roomId } = r.events.RoomCreated.returnValues;
           _changeTransactionStatus(
-            r.transactionHash, TransactionStatus.confirmed, roomId
+            r.transactionHash, TransactionStatus.confirmed
           );
         }
       })

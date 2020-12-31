@@ -49,7 +49,7 @@ function createRoomRoute({ controllers, config }) {
 function getRoomRoute({ controllers, config }) {
   return {
     method: 'GET',
-    url: '/rooms/:roomId',
+    url: '/rooms/:id',
     schema: getRoom.schema(config),
     handler: getRoom.handler({ config, ...controllers }),
   };
@@ -59,7 +59,7 @@ function getRoomRoute({ controllers, config }) {
 function rejectBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/bookings/reject/:id',
+    url: '/bookings/:id/reject',
     schema: rejectBooking.schema(config),
     handler: rejectBooking.handler({ config, ...controllers }),
   };
@@ -68,7 +68,7 @@ function rejectBookRoute({ controllers, config }) {
 function acceptBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/bookings/accept/:id',
+    url: '/bookings/:id/accept',
     schema: acceptBooking.schema(config),
     handler: acceptBooking.handler({ config, ...controllers }),
   };
