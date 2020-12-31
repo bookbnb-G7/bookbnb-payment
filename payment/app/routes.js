@@ -3,6 +3,7 @@ const getWallets = require('./handlers/getAllWalletsHandler');
 const createWallet = require('./handlers/createWalletHandler');
 
 const getRoom = require('./handlers/getRoomHandler');
+const getRooms = require('./handlers/getAllRoomsHandler');
 const createRoom = require('./handlers/createRoomHandler');
 
 const rejectBooking = require('./handlers/rejectBookingHandler');
@@ -55,6 +56,15 @@ function getRoomRoute({ controllers, config }) {
   };
 }
 
+function getAllRoomsRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/rooms',
+    schema: getRooms.schema(config),
+    handler: getRooms.handler({ config, ...controllers }),
+  };
+}
+
 
 function rejectBookRoute({ controllers, config }) {
   return {
@@ -90,6 +100,7 @@ module.exports = [
   createWalletRoute,
   createRoomRoute,
   getRoomRoute,
+  getAllRoomsRoute,
   createIntentBookRoute,
   acceptBookRoute,
   rejectBookRoute

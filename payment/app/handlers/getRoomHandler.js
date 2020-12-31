@@ -3,18 +3,18 @@ function schema() {
     params: {
       type: 'object',
       properties: {
-        roomId: {
+        id: {
           type: 'string',
         },
       },
     },
-    required: ['roomId'],
+    required: ['id'],
   };
 }
 
 function handler({ roomController }) {
   return async function (req, reply) {
-    const room = await roomController.getRoom(req.params.roomId);
+    const room = await roomController.getRoom(req.params.id);
     reply.code(200).send(room);
   };
 }

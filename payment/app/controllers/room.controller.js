@@ -1,5 +1,6 @@
-const { TransactionStatus } = require('../ultis');
 const { Room } = require('../models/room');
+const { Wallet } = require('../models/wallet');
+const { TransactionStatus } = require('../ultis');
 const { getContract, toWei } = require('../ultis')
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
@@ -12,15 +13,24 @@ const _changeTransactionStatus = async (transactionHash, newStatus) => {
   });
 };
 
+const _getWallet = async (uuid) => {
+  return Wallet.findOne({ where: {uuid: uuid} }).then((wallet) => {
+    if (wallet) {
+      return wallet.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
 const createRoom = ({ config }) => async (web3, price, ownerId) => {
-  const wallets = await web3.eth.getAccounts();
-  const ownerWallet = wallets[0]
+  const ownerWallet = await _getWallet(ownerId)
 
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].createRoom(toWei(price))
-      .send({ from: ownerWallet })
+      .send({ from: ownerWallet.address })
       .on('transactionHash', (hash) => {
         Room.create({
           price: price,
@@ -57,7 +67,14 @@ const getRoom = async (roomId) => {
   });
 };
 
+const getAllRooms = async () => {
+  return Room.findAll({raw: true}).then((rooms) => {
+    return rooms;
+  });
+}
+
 module.exports = ({ config }) => ({
   getRoom: getRoom,
+  getAllRooms: getAllRooms,
   createRoom: createRoom({ config })
 });
