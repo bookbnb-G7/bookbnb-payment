@@ -113,7 +113,7 @@ const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
       dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
     )
-    .send({ from: ownerWallet.address )
+    .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
       if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, dateTo)) {
         const { roomId } = r.events.RoomBooked.returnValues;
