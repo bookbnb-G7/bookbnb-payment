@@ -126,8 +126,6 @@ const rejectBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
   const ownerWallet = _getWallet(ownerId);
   const bookerWallet = _getWallet(bookerId);
 
-  const gasPrice = 0;
-
   return new Promise((resolve, reject) => {
     bookbnbContract.methods.rejectBatch(
       roomId,
@@ -135,7 +133,7 @@ const rejectBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
       dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
     )
-      .send({ from: ownerWallet.address, gasPrice: toWei(gasPrice) })
+      .send({ from: ownerWallet.address })
       .on('receipt', (r) => {
         if (r.events.BookIntentRejected && _checkEventDate(r.events.BookIntentRejected, dateTo)) {
           const { roomId } = r.events.RoomBooked.returnValues;
