@@ -23,7 +23,7 @@ function schema(_config) {
 
 function handler({ bookingController, walletController }) {
   return async function (req) {
-    const wallet = await walletController.getWeb3WithWallet(req.body.ownerId);
+    const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
     const dateFrom = new Date(req.body.dateFrom);
     const dateTo = new Date(req.body.dateTo);
