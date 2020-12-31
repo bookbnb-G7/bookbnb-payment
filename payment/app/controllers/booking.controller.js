@@ -1,7 +1,7 @@
+const { Room } = require('../models/room');
+const { Wallet } = require('../models/wallet');
 const { TransactionStatus } = require('../ultis');
-const { getRoom } = require('../controllers/room.controller');
 const { toWei, getContract, daysBetween } = require('../ultis');
-const { getWallet } = require('../controllers/wallet.controller')
 const { Booking, BookingStatus } = require('../models/booking');
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
@@ -29,12 +29,27 @@ const _checkEventDate = async (eventToCheck, date) => {
   return new Date(year, month, day) === date;
 }
 
+const _getRoom = async (roomId) => {
+  return Room.findOne({ where: {id: roomId} }).then((room) => {
+    if (room) {
+      return room.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
+const _getWallet = async (uuid) => {
+  let wallet = await Wallet.findOne({ where: {uuid: uuid} });
+  if (!wallet) return {error: "not found"};
+  return wallet;
+};
 
 const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom, dateTo) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const bookerWallet = getWallet(bookerId);
-  const targetRoom = getRoom(roomId);
+  const bookerWallet = _getWallet(bookerId);
+  const targetRoom = _getRoom(roomId);
 
   const days = daysBetween(dateFrom, dateTo);
   const bookingPrice = targetRoom.price * days;
@@ -81,8 +96,8 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
 const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, dateFrom, dateTo) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const ownerWallet = getWallet(ownerId);
-  const bookerWallet = getWallet(bookerId);
+  const ownerWallet = _getWallet(ownerId);
+  const bookerWallet = _getWallet(bookerId);
 
   const gasPrice = 0;
 
@@ -108,8 +123,8 @@ const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
 const rejectBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, dateFrom, dateTo) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const ownerWallet = getWallet(ownerId);
-  const bookerWallet = getWallet(bookerId);
+  const ownerWallet = _getWallet(ownerId);
+  const bookerWallet = _getWallet(bookerId);
 
   const gasPrice = 0;
 
@@ -120,7 +135,7 @@ const rejectBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
       dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
     )
-      .send({ from: ownerWallet.address,gasPrice: toWei(gasPrice) })
+      .send({ from: ownerWallet.address, gasPrice: toWei(gasPrice) })
       .on('receipt', (r) => {
         if (r.events.BookIntentRejected && _checkEventDate(r.events.BookIntentRejected, dateTo)) {
           const { roomId } = r.events.RoomBooked.returnValues;
