@@ -2,8 +2,8 @@ const BigNumber = require('bignumber.js');
 const BookbnbABI = require('../abi/bookbnb-contract.json').abi;
 
 const toWei = (number) => {
-  const WEIS_IN_ETHER = new BigNumber(10).pow(18);
-  return new BigNumber(number).times(WEIS_IN_ETHER).toFixed();
+  const WEIS_IN_ETHER = BigNumber(10).pow(18);
+  return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
 };
 
 const getContract = (web3, address) => {
