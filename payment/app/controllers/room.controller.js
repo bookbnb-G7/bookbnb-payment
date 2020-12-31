@@ -18,9 +18,6 @@ const createRoom = ({ config }) => async (web3, price, ownerId) => {
 
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  console.log('price: ', price);
-  console.log('ownerId ', ownerId);
-
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].createRoom(toWei(price))
       .send({ from: ownerWallet })

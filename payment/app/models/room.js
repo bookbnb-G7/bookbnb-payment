@@ -6,7 +6,7 @@ const Sequelize = require('sequelize')
 // we set a default id as primary
 
 const Room = database.define('Rooms', {
-  id: { type: Sequelize.INTEGER, primaryKey: true },
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   roomId: { type: Sequelize.INTEGER, allowNull: true },
   price: { type: Sequelize.INTEGER, allowNull: false },
   ownerId: { type: Sequelize.INTEGER, allowNull: false },
