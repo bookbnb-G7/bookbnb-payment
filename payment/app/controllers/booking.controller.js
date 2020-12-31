@@ -42,7 +42,7 @@ const _getRoom = async (roomId) => {
 const _getWallet = async (uuid) => {
   let wallet = await Wallet.findOne({ where: {uuid: uuid} });
   if (!wallet) return {error: "not found"};
-  return wallet;
+  return wallet
 };
 
 const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom, dateTo) => {
@@ -51,8 +51,15 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   const bookerWallet = await web3.eth.getAccounts();
   const targetRoom = await _getRoom(roomId);
 
-  const days = daysBetween(dateFrom, dateTo);
+  const days = daysBetween(dateFrom, dateTo) + 1;
   const bookingPrice = targetRoom.price * days;
+
+  console.log('dateFrom');
+  console.log(dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear());
+
+  console.log('dateTo');
+  console.log(dateTo.getDay(), dateTo.getMonth(), dateTo.getFullYear());
+
 
   return new Promise((resolve, reject) => {
     bookbnbContract.methods.intentBookingBatch(
@@ -99,8 +106,6 @@ const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
   const ownerWallet = _getWallet(ownerId);
   const bookerWallet = _getWallet(bookerId);
 
-  const gasPrice = 0;
-
   return new Promise((resolve, reject) => {
     bookbnbContract.methods.acceptBatch(
       roomId,
@@ -108,7 +113,7 @@ const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, da
       dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
     )
-    .send({ from: ownerWallet.address, gasPrice: toWei(gasPrice) })
+    .send({ from: ownerWallet.address )
     .on('receipt', (r) => {
       if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, dateTo)) {
         const { roomId } = r.events.RoomBooked.returnValues;

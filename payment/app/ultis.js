@@ -12,8 +12,8 @@ const getContract = (web3, address) => {
 
 const daysBetween = (initialDate, lastDate) => {
   const timeBetweenDates = lastDate.getTime() -  initialDate.getTime();
-  return timeBetweenDates / (1000 * 3600 * 24);
-};
+  return Math.ceil(timeBetweenDates / (1000 * 60 * 60 * 24));
+}
 
 const TransactionStatus = Object.freeze({
   "pending": 1,
