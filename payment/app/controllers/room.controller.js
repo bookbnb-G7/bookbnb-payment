@@ -34,6 +34,10 @@ const createRoom = ({ config }) => async (web3, price, ownerId) => {
       .on('receipt', (r) => {
         console.log('receipt: ', r);
         if (r.events.RoomCreated) {
+
+          console.log("ROOM BOOKING RETURN VALUES");
+          console.log(r.events.RoomCreated.returnValues);
+
           _changeTransactionStatus(
             r.transactionHash, TransactionStatus.confirmed
           );
