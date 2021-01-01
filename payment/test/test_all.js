@@ -272,10 +272,10 @@ describe('Bookings', () => {
       })
   })
 
-  it('is possible to accept a pending booking', (done) =>  {
+  it('is possible to accept a pending booking', (done) => {
     chai.request(url)
       .post('/bookings/' + 1 + '/accept')
-      .send({roomOwnerId: 2})
+      .send({ roomOwnerId: 2 })
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('id');
@@ -289,6 +289,37 @@ describe('Bookings', () => {
         expect(res.body).to.have.property('transactionStatus');
         expect(res.body).to.have.property('transactionHash');
         expect(res.body.bookingStatus).to.be.eql(BookingStatus.accepted);
+        done();
+      })
+  })
+
+  it('is possible to reject a pending booking', (done) =>  {
+    chai.request(url)
+      .post('/bookings/' + 2 + '/reject')
+      .send({roomOwnerId: 2})
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.have.property('id');
+        expect(res.body).to.have.property('price');
+        expect(res.body).to.have.property('roomId');
+        expect(res.body).to.have.property('bookerId');
+        expect(res.body).to.have.property('dateFrom');
+        expect(res.body).to.have.property('dateTo');
+        expect(res.body).to.have.property('roomOwnerId');
+        expect(res.body).to.have.property('bookingStatus');
+        expect(res.body).to.have.property('transactionStatus');
+        expect(res.body).to.have.property('transactionHash');
+        expect(res.body.bookingStatus).to.be.eql(BookingStatus.rejected);
+        done();
+      })
+  })
+
+  it('returns zero pending bookings after accepting/rejecting all', (done) => {
+    chai.request(url)
+      .get('/bookings/pending/' + 2)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.length).to.be.eql(0);
         done();
       })
   })
