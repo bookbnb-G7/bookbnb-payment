@@ -7,7 +7,7 @@ function schema(_config) {
           type: 'integer',
         },
         roomId: {
-          type: 'number',
+          type: 'integer',
         },
         dateFrom: {
           type: 'string'
@@ -26,7 +26,7 @@ function handler({ bookingController, walletController }) {
     const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
     let dateFromSplit = req.body.dateFrom.split("-");
-    let dateToSplit = req.body.dateFrom.split("-");
+    let dateToSplit = req.body.dateTo.split("-");
 
     // day month year
 
