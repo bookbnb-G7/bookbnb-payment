@@ -12,10 +12,10 @@ function schema() {
   };
 }
 
-function handler({ roomController }) {
+function handler({ bookingController }) {
   return async function (req, reply) {
-    const room = await roomController.getRoom(req.params.id);
-    reply.code(200).send(room);
+    const booking = await bookingController.getBooking(req.params.id);
+    reply.code(200).send(booking);
   };
 }
 

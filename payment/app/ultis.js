@@ -1,6 +1,12 @@
 const BigNumber = require('bignumber.js');
 const BookbnbABI = require('../abi/bookbnb-contract.json').abi;
 
+const sqlDateonlyToDate = (sqlDateonly) => {
+  // sqlDateonly format -> YYYY-MM-DD
+  const split = sqlDateonly.split("-");
+  return new Date(split[0], split[1], split[2]);
+}
+
 const toWei = (number) => {
   const WEIS_IN_ETHER = BigNumber(10).pow(18);
   return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
@@ -26,5 +32,6 @@ module.exports = {
   toWei,
   getContract,
   daysBetween,
-  TransactionStatus
+  sqlDateonlyToDate,
+  TransactionStatus,
 }

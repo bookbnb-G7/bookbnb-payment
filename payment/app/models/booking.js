@@ -2,17 +2,18 @@ const { database } = require('../db');
 const Sequelize = require('sequelize');
 
 const BookingStatus = Object.freeze({
-  "notSpecified": 1,
+  "pending": 1,
   "accepted": 2,
   "rejected": 3
 });
 
 const Booking = database.define('Bookings', {
-  id: { type: Sequelize.INTEGER, primaryKey: true },
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
 
   price: { type: Sequelize.INTEGER, allowNull: false },
   roomId: { type: Sequelize.INTEGER, allowNull: false },
   bookerId: { type: Sequelize.INTEGER, allowNull: false },
+  roomOwnerId: { type: Sequelize.INTEGER, allowNull: false},
 
   dateFrom: { type: Sequelize.DATEONLY, allowNull: false },
   dateTo: { type: Sequelize.DATEONLY, allowNull: false },

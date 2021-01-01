@@ -1,8 +1,8 @@
 const { Room } = require('../models/room');
 const { Wallet } = require('../models/wallet');
 const { TransactionStatus } = require('../ultis');
-const { toWei, getContract, daysBetween } = require('../ultis');
 const { Booking, BookingStatus } = require('../models/booking');
+const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../ultis');
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Booking.findOne({where: {transactionHash: transactionHash}}).then((booking) => {
@@ -14,8 +14,8 @@ const _changeTransactionStatus = async (transactionHash, newStatus) => {
   });
 };
 
-const _changeBookingStatus = async (roomId, dateFrom, dateTo, newStatus) => {
-  Booking.findOne({where: {roomId: roomId, dateFrom: dateFrom, dateTo: dateTo}}).then((booking) => {
+const _changeBookingStatus = async (bookingId, newStatus) => {
+  Booking.findOne({where: {id: bookingId}}).then((booking) => {
     if (booking) {
       booking.update({bookingStatus: newStatus}).then(() => {
         return true;
@@ -40,10 +40,15 @@ const _getRoom = async (roomId) => {
 };
 
 const _getWallet = async (uuid) => {
-  let wallet = await Wallet.findOne({ where: {uuid: uuid} });
-  if (!wallet) return {error: "not found"};
-  return wallet
+  return Wallet.findOne({ where: {uuid: uuid} }).then((wallet) => {
+    if (wallet) {
+      return wallet.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
 };
+
 
 const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom, dateTo) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
@@ -77,13 +82,15 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
     .on('transactionHash', (hash) => {
       Booking.create({
         price: bookingPrice,
+
         roomId: roomId,
         bookerId: bookerId,
+        roomOwnerId: targetRoom.ownerId,
 
         dateFrom: dateFrom,
         dateTo: dateTo,
 
-        bookingStatus: BookingStatus.notSpecified,
+        bookingStatus: BookingStatus.pending,
         transactionStatus: TransactionStatus.pending,
 
         transactionHash: hash
@@ -107,58 +114,105 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   });
 };
 
-const acceptBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, dateFrom, dateTo) => {
+const getBooking = async (bookingId) => {
+  return Booking.findOne({ where: {id: bookingId} }).then((booking) => {
+    if (booking) {
+      return booking.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
+const getPendingBookings = async (roomOwnerId) => {
+  // returns all the bookings that were made to the
+  // from the rooms which the user roomOwnerId is the
+  // owner and that has a pending state
+  return Booking.findAll({where: {
+      roomOwnerId: roomOwnerId,
+      bookingStatus: BookingStatus.pending
+    } }).then((pendingBookings) => {
+    return pendingBookings;
+  })
+}
+
+const acceptBooking = ({ config }) => async (web3, bookingId) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const ownerWallet = _getWallet(ownerId);
-  const bookerWallet = _getWallet(bookerId);
+  const booking = await getBooking(bookingId);
+
+  const bookerWallet = await _getWallet(booking.bookerId);
+  const ownerWallet = await _getWallet(booking.roomOwnerId);
+
+  const dateFrom = sqlDateonlyToDate(booking.dateFrom);
+  const dateTo = sqlDateonlyToDate(booking.dateTo);
 
   return new Promise((resolve, reject) => {
-    bookbnbContract.methods.acceptBatch(
-      roomId,
+    bookbnbContract['methods'].acceptBatch(
+      booking.roomId,
       bookerWallet.address,
-      dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
+      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth(), dateTo.getDay()
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
-      if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, dateTo)) {
-        const { roomId } = r.events.RoomBooked.returnValues;
-        _changeBookingStatus(roomId, dateFrom, dateTo, BookingStatus.accepted);
-        return resolve({message: "room accepted successfully"});
+      if (process.env.ENVIRONMENT === 'testing') {
+        _changeBookingStatus(bookingId, BookingStatus.accepted);
+        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
+        booking.bookingStatus = BookingStatus.accepted;
+        return resolve(booking);
+      }
+
+      if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, booking.dateTo)) {
+        _changeBookingStatus(bookingId, BookingStatus.accepted);
+        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
+        booking.bookingStatus = BookingStatus.accepted;
+        return resolve(booking);
       }
     })
     .on('error', (err) => reject(err));
   });
 };
 
-const rejectBooking = ({ config }) => async (web3, ownerId, bookerId, roomId, dateFrom, dateTo) => {
+const rejectBooking = ({ config }) => async (web3, bookingId) => {
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  const ownerWallet = _getWallet(ownerId);
-  const bookerWallet = _getWallet(bookerId);
+  const booking = await getBooking(bookingId);
+
+  const bookerWallet = await _getWallet(booking.bookerId);
+  const ownerWallet = await _getWallet(booking.roomOwnerId);
+
+  const dateFrom = sqlDateonlyToDate(booking.dateFrom);
+  const dateTo = sqlDateonlyToDate(booking.dateTo);
 
   return new Promise((resolve, reject) => {
-    bookbnbContract.methods.rejectBatch(
-      roomId,
+    bookbnbContract['methods'].rejectBatch(
+      booking.roomId,
       bookerWallet.address,
-      dateFrom.getDay(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDay(), dateTo.getMonth(), dateTo.getDay()
+      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth(), dateTo.getDay()
     )
       .send({ from: ownerWallet.address })
       .on('receipt', (r) => {
-        if (r.events.BookIntentRejected && _checkEventDate(r.events.BookIntentRejected, dateTo)) {
-          const { roomId } = r.events.RoomBooked.returnValues;
-          _changeBookingStatus(roomId, dateFrom, dateTo, BookingStatus.rejected);
-          return resolve({message: "room rejected successfully"});
+        if (process.env.ENVIRONMENT === 'testing') {
+          _changeBookingStatus(booking.id, BookingStatus.rejected);
+          booking.bookingStatus = BookingStatus.rejected;
+          return resolve(booking);
+        }
+
+        if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, booking.dateTo)) {
+          _changeBookingStatus(booking.id, BookingStatus.rejected);
+          booking.bookingStatus = BookingStatus.rejected;
+          return resolve(booking);
         }
       })
       .on('error', (err) => reject(err));
   });
 };
 
-
 module.exports = ({ config }) => ({
+  getBooking: getBooking,
+  getPendingBookings: getPendingBookings,
   acceptBooking: acceptBooking({ config }),
   rejectBooking: rejectBooking({ config }),
   createIntentBook: createIntentBook({ config }),

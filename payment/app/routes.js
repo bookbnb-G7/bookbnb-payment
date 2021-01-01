@@ -3,11 +3,14 @@ const getWallets = require('./handlers/getAllWalletsHandler');
 const createWallet = require('./handlers/createWalletHandler');
 
 const getRoom = require('./handlers/getRoomHandler');
+const getRooms = require('./handlers/getAllRoomsHandler');
 const createRoom = require('./handlers/createRoomHandler');
 
+const getBooking = require('./handlers/getBookingHandler');
 const rejectBooking = require('./handlers/rejectBookingHandler');
 const acceptBooking = require('./handlers/acceptBookingHandler');
 const createIntentBook = require('./handlers/createIntentBookHandler');
+const getPendingBookings = require('./handlers/getPendingBookingsHandler');
 
 function getWalletRoute({ controllers, config }) {
   return {
@@ -55,6 +58,23 @@ function getRoomRoute({ controllers, config }) {
   };
 }
 
+function getAllRoomsRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/rooms',
+    schema: getRooms.schema(config),
+    handler: getRooms.handler({ config, ...controllers }),
+  };
+}
+
+function getBookingRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/bookings/:id',
+    schema: getBooking.schema(config),
+    handler: getBooking.handler({ config, ...controllers }),
+  };
+}
 
 function rejectBookRoute({ controllers, config }) {
   return {
@@ -74,6 +94,15 @@ function acceptBookRoute({ controllers, config }) {
   };
 }
 
+function getPendingBookingsRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/bookings/pending/:roomOwnerId',
+    schema: getPendingBookings.schema(config),
+    handler: getPendingBookings.handler({ config, ...controllers }),
+  };
+}
+
 function createIntentBookRoute({ controllers, config }) {
   return {
     method: 'POST',
@@ -83,14 +112,16 @@ function createIntentBookRoute({ controllers, config }) {
   };
 }
 
-
 module.exports = [
   getWalletRoute,
   getAllWalletsRoute,
   createWalletRoute,
   createRoomRoute,
   getRoomRoute,
+  getBookingRoute,
+  getAllRoomsRoute,
   createIntentBookRoute,
+  getPendingBookingsRoute,
   acceptBookRoute,
   rejectBookRoute
 ];

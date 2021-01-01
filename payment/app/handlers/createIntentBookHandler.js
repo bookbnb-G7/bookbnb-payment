@@ -7,7 +7,7 @@ function schema(_config) {
           type: 'integer',
         },
         roomId: {
-          type: 'number',
+          type: 'integer',
         },
         dateFrom: {
           type: 'string'
@@ -22,20 +22,22 @@ function schema(_config) {
 }
 
 function handler({ bookingController, walletController }) {
-  return async function (req) {
+  return async function (req, reply) {
     const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
     let dateFromSplit = req.body.dateFrom.split("-");
-    let dateToSplit = req.body.dateFrom.split("-");
+    let dateToSplit = req.body.dateTo.split("-");
 
     // day month year
 
     const dateFrom = new Date(dateFromSplit[2], dateFromSplit[1], dateFromSplit[0]);
     const dateTo = new Date(dateToSplit[2], dateToSplit[1], dateToSplit[0]);
 
-    return bookingController.createIntentBook(
+    let booking = await bookingController.createIntentBook(
       wallet, req.body.bookerId, req.body.roomId, dateFrom, dateTo
     );
+
+    reply.code(201).send(booking);
   };
 }
 
