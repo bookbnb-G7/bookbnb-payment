@@ -187,6 +187,19 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
   const dateFrom = sqlDateonlyToDate(booking.dateFrom);
   const dateTo = sqlDateonlyToDate(booking.dateTo);
 
+  console.log('booker wallet');
+  console.log(bookerWallet);
+
+  console.log('owner wallet');
+  console.log(ownerWallet);
+
+  console.log('dateFrom');
+  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
+
+  console.log('dateTo');
+  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
+
+
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].rejectBatch(
       booking.roomId,
