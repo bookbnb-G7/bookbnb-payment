@@ -20,7 +20,7 @@ function schema(_config) {
     },
     required: ['bookerId', 'roomId', 'dateFrom', 'dateTo'],
     response: {
-      200: {
+      201: {
         type: 'object',
         properties: {
           id: { type: 'integer' },
