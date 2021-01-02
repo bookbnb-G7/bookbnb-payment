@@ -151,7 +151,7 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].acceptBatch(
-      booking.roomId,
+      booking.roomId - 1,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
@@ -202,28 +202,28 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].rejectBatch(
-      booking.roomId,
+      booking.roomId - 1,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
     )
-      .send({ from: ownerWallet.address })
-      .on('receipt', (r) => {
+    .send({ from: ownerWallet.address })
+    .on('receipt', (r) => {
 
-        if (process.env.ENVIRONMENT === 'testing') {
-          _changeBookingStatus(booking.id, BookingStatus.rejected);
-          booking.bookingStatus = BookingStatus.rejected;
-          return resolve(booking);
-        }
+    if (process.env.ENVIRONMENT === 'testing') {
+      _changeBookingStatus(booking.id, BookingStatus.rejected);
+      booking.bookingStatus = BookingStatus.rejected;
+      return resolve(booking);
+    }
 
-        if (r.events.RoomBooked) {
-          console.log('events', r.events.RoomBooked);
-          _changeBookingStatus(booking.id, BookingStatus.rejected);
-          booking.bookingStatus = BookingStatus.rejected;
-          return resolve(booking);
-        }
-      })
-      .on('error', (err) => reject(err));
+    if (r.events.RoomBooked) {
+      console.log('events', r.events.RoomBooked);
+      _changeBookingStatus(booking.id, BookingStatus.rejected);
+      booking.bookingStatus = BookingStatus.rejected;
+      return resolve(booking);
+    }
+    })
+    .on('error', (err) => reject(err));
   });
 };
 
