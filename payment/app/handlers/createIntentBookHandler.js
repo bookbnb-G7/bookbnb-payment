@@ -1,5 +1,6 @@
 function schema(_config) {
   return {
+    description: 'Creates a booking for a Room',
     params: {
       type: 'object',
       properties: {
@@ -18,6 +19,23 @@ function schema(_config) {
       },
     },
     required: ['bookerId', 'roomId', 'dateFrom', 'dateTo'],
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          price: { type: 'integer' },
+          roomId: { type: 'integer' },
+          bookerId: { type: 'integer' },
+          roomOwnerId: { type: 'integer' },
+          dateFrom: { type: 'string', format: 'date' },
+          dateTo: { type: 'string', format: 'date' },
+          bookingStatus: { type: 'integer' },
+          transactionStatus: { type: 'integer' },
+          transactionHash: { type: 'string' },
+        }
+      }
+    },
   };
 }
 

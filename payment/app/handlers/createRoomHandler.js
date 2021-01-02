@@ -1,5 +1,6 @@
 function schema(_config) {
   return {
+    description: 'Creates a room',
     params: {
       type: 'object',
       properties: {
@@ -12,6 +13,18 @@ function schema(_config) {
       },
     },
     required: ['ownerId', 'price'],
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          price: { type: 'integer' },
+          ownerId: { type: 'integer' },
+          transactionStatus: { type: 'integer' },
+          transactionHash: { type: 'string' },
+        }
+      }
+    }
   };
 }
 
