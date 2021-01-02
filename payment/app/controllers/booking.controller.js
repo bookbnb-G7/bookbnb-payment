@@ -194,6 +194,8 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
     )
       .send({ from: ownerWallet.address })
       .on('receipt', (r) => {
+        console.log(r);
+
         if (process.env.ENVIRONMENT === 'testing') {
           _changeBookingStatus(booking.id, BookingStatus.rejected);
           booking.bookingStatus = BookingStatus.rejected;
