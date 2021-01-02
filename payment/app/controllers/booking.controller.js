@@ -141,6 +141,8 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
 
   const booking = await getBooking(bookingId);
 
+  console.log(booking);
+
   const bookerWallet = await _getWallet(booking.bookerId);
   const ownerWallet = await _getWallet(booking.roomOwnerId);
 
@@ -152,7 +154,7 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
       booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDate(), dateTo.getMonth(), dateTo.getDay()
+      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
@@ -190,11 +192,10 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
       booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDate(), dateTo.getMonth(), dateTo.getDay()
+      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
     )
       .send({ from: ownerWallet.address })
       .on('receipt', (r) => {
-        console.log(r);
 
         if (process.env.ENVIRONMENT === 'testing') {
           _changeBookingStatus(booking.id, BookingStatus.rejected);
