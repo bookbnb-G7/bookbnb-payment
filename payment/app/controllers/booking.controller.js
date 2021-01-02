@@ -200,7 +200,8 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
           return resolve(booking);
         }
 
-        if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, booking.dateTo)) {
+        if (r.events.RoomBooked &&) {
+          console.log('events', r.events.RoomBooked);
           _changeBookingStatus(booking.id, BookingStatus.rejected);
           booking.bookingStatus = BookingStatus.rejected;
           return resolve(booking);
