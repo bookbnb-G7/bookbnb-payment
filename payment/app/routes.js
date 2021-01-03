@@ -5,12 +5,14 @@ const createWallet = require('./handlers/createWalletHandler');
 const getRoom = require('./handlers/getRoomHandler');
 const getRooms = require('./handlers/getAllRoomsHandler');
 const createRoom = require('./handlers/createRoomHandler');
+const deleteRoom = require('./handlers/deleteRoomHandler')
 
 const getBooking = require('./handlers/getBookingHandler');
 const rejectBooking = require('./handlers/rejectBookingHandler');
 const acceptBooking = require('./handlers/acceptBookingHandler');
+const deleteBooking = require('./handlers/deleteBookingHandler');
+const getAllBookings = require('./handlers/getAllBookingsHandler');
 const createIntentBook = require('./handlers/createIntentBookHandler');
-const getPendingBookings = require('./handlers/getPendingBookingsHandler');
 
 function getWalletRoute({ controllers, config }) {
   return {
@@ -67,6 +69,15 @@ function getAllRoomsRoute({ controllers, config }) {
   };
 }
 
+function deleteRoomRoute({ controllers, config }) {
+  return {
+    method: 'DELETE',
+    url: '/rooms/:id',
+    schema: deleteRoom.schema(config),
+    handler: deleteRoom.handler({ config, ...controllers }),
+  };
+}
+
 function getBookingRoute({ controllers, config }) {
   return {
     method: 'GET',
@@ -94,15 +105,6 @@ function acceptBookRoute({ controllers, config }) {
   };
 }
 
-function getPendingBookingsRoute({ controllers, config }) {
-  return {
-    method: 'GET',
-    url: '/bookings/pending/:roomOwnerId',
-    schema: getPendingBookings.schema(config),
-    handler: getPendingBookings.handler({ config, ...controllers }),
-  };
-}
-
 function createIntentBookRoute({ controllers, config }) {
   return {
     method: 'POST',
@@ -112,16 +114,36 @@ function createIntentBookRoute({ controllers, config }) {
   };
 }
 
+function getBookings({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/bookings',
+    schema: getAllBookings.schema(config),
+    handler: getAllBookings.handler({ config, ...controllers }),
+  };
+}
+
+function deleteBookingRoute({ controllers, config }) {
+  return {
+    method: 'DELETE',
+    url: '/bookings/:id',
+    schema: deleteBooking.schema(config),
+    handler: deleteBooking.handler({ config, ...controllers }),
+  };
+}
+
 module.exports = [
   getWalletRoute,
   getAllWalletsRoute,
   createWalletRoute,
   createRoomRoute,
   getRoomRoute,
+  deleteRoomRoute,
   getBookingRoute,
   getAllRoomsRoute,
+  deleteBookingRoute,
   createIntentBookRoute,
-  getPendingBookingsRoute,
+  getBookings,
   acceptBookRoute,
   rejectBookRoute
 ];

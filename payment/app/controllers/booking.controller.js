@@ -124,14 +124,26 @@ const getBooking = async (bookingId) => {
   });
 };
 
-const getPendingBookings = async (roomOwnerId) => {
-  // returns all the bookings that were made to the
-  // from the rooms which the user roomOwnerId is the
-  // owner and that has a pending state
-  return Booking.findAll({where: {
-      roomOwnerId: roomOwnerId,
-      bookingStatus: BookingStatus.pending
-    } }).then((pendingBookings) => {
+const getBookings = async (queryParams) => {
+  let query = {where: {}};
+
+  if (queryParams.bookerId) {
+    query.where.bookerId = queryParams.bookerId;
+  }
+
+  if (queryParams.roomOwnerId) {
+    query.where.roomOwnerId = queryParams.roomOwnerId;
+  }
+
+  if (queryParams.roomId) {
+    query.where.roomId = queryParams.roomId;
+  }
+
+  if (queryParams.bookingStatus) {
+    query.where.bookingStatus = queryParams.bookingStatus;
+  }
+
+  return Booking.findAll(query).then((pendingBookings) => {
     return pendingBookings;
   })
 }
@@ -227,9 +239,20 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
   });
 };
 
+const deleteBooking = async (bookingId) => {
+  return Booking.findOne({ where: {id: bookingId} }).then((booking) => {
+    if (booking) {
+      return booking.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+}
+
 module.exports = ({ config }) => ({
   getBooking: getBooking,
-  getPendingBookings: getPendingBookings,
+  getBookings: getBookings,
+  deleteBooking: deleteBooking,
   acceptBooking: acceptBooking({ config }),
   rejectBooking: rejectBooking({ config }),
   createIntentBook: createIntentBook({ config }),

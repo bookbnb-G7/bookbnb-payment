@@ -230,7 +230,8 @@ describe('Bookings', () => {
 
   it('is possible to get all pending bookings', (done) => {
     chai.request(url)
-      .get('/bookings/pending/' + 2)
+      .get('/bookings?' + 'roomOwnerId=' + 2 +
+           '&' + 'bookingStatus=' + BookingStatus.pending)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(2);
@@ -316,7 +317,8 @@ describe('Bookings', () => {
 
   it('returns zero pending bookings after accepting/rejecting all', (done) => {
     chai.request(url)
-      .get('/bookings/pending/' + 2)
+      .get('/bookings?' + 'roomOwnerId=' + 2 +
+        '&' + 'bookingStatus=' + BookingStatus.pending)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(0);

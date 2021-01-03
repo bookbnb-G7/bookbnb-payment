@@ -1,15 +1,23 @@
 function schema() {
   return {
     description: 'Returns a list of pending bookings of a room owner',
-    params: {
+    querystring: {
       type: 'object',
       properties: {
+        bookerId: {
+          type: 'integer'
+        },
         roomOwnerId: {
           type: 'integer',
         },
+        roomId: {
+          type: 'integer',
+        },
+        bookingStatus:  {
+          type: 'integer'
+        },
       },
     },
-    required: ['roomOwnerId'],
     response: {
       200: {
         type: 'array',
@@ -35,9 +43,8 @@ function schema() {
 
 function handler({ bookingController }) {
   return async function (req, reply) {
-    const pendingBookings =
-      await bookingController.getPendingBookings(req.params.roomOwnerId);
-    reply.code(200).send(pendingBookings);
+    const bookings = await bookingController.getBookings(req.query);
+    reply.code(200).send(bookings);
   };
 }
 

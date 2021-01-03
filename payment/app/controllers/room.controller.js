@@ -73,8 +73,19 @@ const getAllRooms = async () => {
   });
 }
 
+const deleteRoom = async (roomId) => {
+  return Room.findOne({ where: {id: roomId} }).then((room) => {
+    if (room) {
+      return room.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
 module.exports = ({ config }) => ({
   getRoom: getRoom,
+  deleteRoom: deleteRoom,
   getAllRooms: getAllRooms,
   createRoom: createRoom({ config })
 });
