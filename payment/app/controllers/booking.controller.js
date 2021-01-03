@@ -71,8 +71,8 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
       roomId - 1,
-      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
+      dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
     .send({
       from: bookerWallet[0],
