@@ -4,8 +4,8 @@ const { TransactionStatus } = require('../ultis');
 const { Booking, BookingStatus } = require('../models/booking');
 const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../ultis');
 
-const _changeTransactionStatus = async (transactionHash, newStatus) => {
-  Booking.findOne({where: {transactionHash: transactionHash}}).then((booking) => {
+const _changeTransactionStatus = async (bookingId, newStatus) => {
+  Booking.findOne({where: {id: bookingId}}).then((booking) => {
     if (booking) {
       booking.update({transactionStatus: newStatus}).then(() => {
         return true;
@@ -238,6 +238,7 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
 
       if (process.env.ENVIRONMENT === 'testing') {
         _changeBookingStatus(booking.id, BookingStatus.rejected);
+        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.rejected;
         return resolve(booking);
       }
@@ -245,6 +246,7 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
       if (r.events.RoomBooked) {
         console.log('events', r.events.RoomBooked);
         _changeBookingStatus(booking.id, BookingStatus.rejected);
+        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.rejected;
         return resolve(booking);
       }
