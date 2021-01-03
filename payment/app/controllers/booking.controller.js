@@ -59,15 +59,14 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   const days = daysBetween(dateFrom, dateTo) + 1;
   const bookingPrice = targetRoom.price * days;
 
-  console.log('dateFrom');
+  console.log('bookingPrice');
   console.log(bookingPrice);
 
-  console.log('dateFrom');
+  console.log('dateFrom: ', dateFrom);
   console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
 
-  console.log('dateTo');
+  console.log('dateTo: ', dateTo);
   console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
-
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
@@ -95,6 +94,8 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
 
         transactionHash: hash
       }).then((newIntentBooking) => {
+        console.log('new booking:')
+        console.log(newIntentBooking);
         return resolve(newIntentBooking.toJSON());
       })
     })
@@ -153,23 +154,35 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
 
   const booking = await getBooking(bookingId);
 
-  console.log(booking);
-
   const bookerWallet = await _getWallet(booking.bookerId);
   const ownerWallet = await _getWallet(booking.roomOwnerId);
 
   const dateFrom = sqlDateonlyToDate(booking.dateFrom);
   const dateTo = sqlDateonlyToDate(booking.dateTo);
 
+  console.log('booker wallet');
+  console.log(bookerWallet);
+
+  console.log('owner wallet');
+  console.log(ownerWallet);
+
+  console.log('dateFrom: ', dateFrom);
+  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
+
+  console.log('dateTo: ', dateTo);
+  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
+
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].acceptBatch(
       booking.roomId - 1,
       bookerWallet.address,
-      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
+      dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
+      console.log('events: ', r.events);
+
       if (process.env.ENVIRONMENT === 'testing') {
         _changeBookingStatus(bookingId, BookingStatus.accepted);
         _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
@@ -177,7 +190,7 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
         return resolve(booking);
       }
 
-      if (r.events.RoomBooked && _checkEventDate(r.events.RoomBooked, booking.dateTo)) {
+      if (r.events.RoomBooked) {
         _changeBookingStatus(bookingId, BookingStatus.accepted);
         _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.accepted;
@@ -205,10 +218,10 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
   console.log('owner wallet');
   console.log(ownerWallet);
 
-  console.log('dateFrom');
+  console.log('dateFrom: ', dateFrom);
   console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
 
-  console.log('dateTo');
+  console.log('dateTo: ', dateTo);
   console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
 
 
@@ -216,24 +229,25 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
     bookbnbContract['methods'].rejectBatch(
       booking.roomId - 1,
       bookerWallet.address,
-      dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear(),
-      dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear()
+      dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
+      dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
+      console.log('events: ', r.events);
 
-    if (process.env.ENVIRONMENT === 'testing') {
-      _changeBookingStatus(booking.id, BookingStatus.rejected);
-      booking.bookingStatus = BookingStatus.rejected;
-      return resolve(booking);
-    }
+      if (process.env.ENVIRONMENT === 'testing') {
+        _changeBookingStatus(booking.id, BookingStatus.rejected);
+        booking.bookingStatus = BookingStatus.rejected;
+        return resolve(booking);
+      }
 
-    if (r.events.RoomBooked) {
-      console.log('events', r.events.RoomBooked);
-      _changeBookingStatus(booking.id, BookingStatus.rejected);
-      booking.bookingStatus = BookingStatus.rejected;
-      return resolve(booking);
-    }
+      if (r.events.RoomBooked) {
+        console.log('events', r.events.RoomBooked);
+        _changeBookingStatus(booking.id, BookingStatus.rejected);
+        booking.bookingStatus = BookingStatus.rejected;
+        return resolve(booking);
+      }
     })
     .on('error', (err) => reject(err));
   });
