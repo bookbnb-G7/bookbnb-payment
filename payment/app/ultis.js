@@ -4,7 +4,7 @@ const BookbnbABI = require('../abi/bookbnb-contract.json').abi;
 const sqlDateonlyToDate = (sqlDateonly) => {
   // sqlDateonly format -> YYYY-MM-DD
   const split = sqlDateonly.split("-");
-  return new Date(split[0], split[1], split[2]);
+  return new Date(split[0], split[1] - 1, split[2]);
 }
 
 const toWei = (number) => {

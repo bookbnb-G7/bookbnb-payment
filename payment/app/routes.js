@@ -105,6 +105,7 @@ function acceptBookRoute({ controllers, config }) {
   };
 }
 
+
 function createIntentBookRoute({ controllers, config }) {
   return {
     method: 'POST',

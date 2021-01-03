@@ -48,8 +48,8 @@ function handler({ bookingController, walletController }) {
 
     // day month year
 
-    const dateFrom = new Date(dateFromSplit[2], dateFromSplit[1], dateFromSplit[0]);
-    const dateTo = new Date(dateToSplit[2], dateToSplit[1], dateToSplit[0]);
+    const dateFrom = new Date(dateFromSplit[2], dateFromSplit[1] - 1, dateFromSplit[0]);
+    const dateTo = new Date(dateToSplit[2], dateToSplit[1] - 1, dateToSplit[0]);
 
     let booking = await bookingController.createIntentBook(
       wallet, req.body.bookerId, req.body.roomId, dateFrom, dateTo
