@@ -1,6 +1,6 @@
 function schema() {
   return {
-    description: 'Returns a room',
+    description: 'Returns a booking for a Room',
     params: {
       type: 'object',
       properties: {
@@ -16,7 +16,12 @@ function schema() {
         properties: {
           id: { type: 'integer' },
           price: { type: 'integer' },
-          ownerId: { type: 'integer' },
+          roomId: { type: 'integer' },
+          bookerId: { type: 'integer' },
+          roomOwnerId: { type: 'integer' },
+          dateFrom: { type: 'string', format: 'date' },
+          dateTo: { type: 'string', format: 'date' },
+          bookingStatus: { type: 'integer' },
           transactionStatus: { type: 'integer' },
           transactionHash: { type: 'string' },
         }
@@ -25,10 +30,10 @@ function schema() {
   };
 }
 
-function handler({ roomController }) {
+function handler({ bookingController }) {
   return async function (req, reply) {
-    const room = await roomController.getRoom(req.params.id);
-    reply.code(200).send(room);
+    const booking = await bookingController.getBooking(req.params.id);
+    reply.code(200).send(booking);
   };
 }
 

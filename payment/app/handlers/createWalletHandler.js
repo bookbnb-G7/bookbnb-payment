@@ -1,5 +1,6 @@
 function schema(_config) {
   return {
+    description: 'Creates a wallet',
     params: {
       type: 'object',
       properties: {
@@ -9,6 +10,16 @@ function schema(_config) {
       },
     },
     required: ['uuid'],
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          uuid: { type: 'integer' },
+          address: { type: 'string' },
+          mnemonic: { type: 'string' },
+        }
+      }
+    }
   };
 }
 

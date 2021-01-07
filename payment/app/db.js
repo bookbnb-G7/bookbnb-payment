@@ -10,6 +10,13 @@ let database = null;
 if (ENVIRONMENT === 'production') {
   database = new Sequelize(DATABASE_URL ,{
     dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
     operatorsAliases: Sequelize.Op,
     define: {timestamp: false}
   })
@@ -33,4 +40,4 @@ if (ENVIRONMENT === 'testing') {
   })
 }
 
-module.exports = { database }
+module.exports = { database };

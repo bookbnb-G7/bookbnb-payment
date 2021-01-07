@@ -1,5 +1,6 @@
 function schema(_config) {
   return {
+    description: 'Creates a booking for a Room',
     params: {
       type: 'object',
       properties: {
@@ -7,7 +8,7 @@ function schema(_config) {
           type: 'integer',
         },
         roomId: {
-          type: 'number',
+          type: 'integer',
         },
         dateFrom: {
           type: 'string'
@@ -18,19 +19,43 @@ function schema(_config) {
       },
     },
     required: ['bookerId', 'roomId', 'dateFrom', 'dateTo'],
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          price: { type: 'integer' },
+          roomId: { type: 'integer' },
+          bookerId: { type: 'integer' },
+          roomOwnerId: { type: 'integer' },
+          dateFrom: { type: 'string', format: 'date' },
+          dateTo: { type: 'string', format: 'date' },
+          bookingStatus: { type: 'integer' },
+          transactionStatus: { type: 'integer' },
+          transactionHash: { type: 'string' },
+        }
+      }
+    },
   };
 }
 
 function handler({ bookingController, walletController }) {
-  return async function (req) {
-    const wallet = await walletController.getWeb3WithWallet(req.body.ownerId);
+  return async function (req, reply) {
+    const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
-    const dateFrom = new Date(req.body.dateFrom);
-    const dateTo = new Date(req.body.dateTo);
+    let dateFromSplit = req.body.dateFrom.split("-");
+    let dateToSplit = req.body.dateTo.split("-");
 
-    return bookingController.createIntentBook(
+    // day month year
+
+    const dateFrom = new Date(dateFromSplit[2], dateFromSplit[1] - 1, dateFromSplit[0]);
+    const dateTo = new Date(dateToSplit[2], dateToSplit[1] - 1, dateToSplit[0]);
+
+    let booking = await bookingController.createIntentBook(
       wallet, req.body.bookerId, req.body.roomId, dateFrom, dateTo
     );
+
+    reply.code(201).send(booking);
   };
 }
 

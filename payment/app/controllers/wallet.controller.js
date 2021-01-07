@@ -30,16 +30,26 @@ const createWallet = ({ config }) => async (uuid) => {
 
   const web3 = new Web3(provider);
   const currentAccounts = await web3.eth.getAccounts();
+  let address = currentAccounts[0];
+
+  // if testing, we return one of the accounts
+  // provided by ganache instead of creating a
+  // new one
+  if (process.env.ENVIRONMENT === 'testing') {
+    address = currentAccounts[uuid - 1];
+  }
 
   return await Wallet.create({
     uuid: uuid,
-    mnemonic: mnemonicPhrase,
-    address: currentAccounts[0]
+    address: address,
+    mnemonic: mnemonicPhrase
   });
 };
 
 const getAllWallets = async () => {
-  await Wallet.findAll({raw: true});
+  return Wallet.findAll({raw: true}).then((wallets) => {
+    return wallets;
+  });
 }
 
 const getWallet = async (uuid) => {

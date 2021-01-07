@@ -3,10 +3,15 @@ const getWallets = require('./handlers/getAllWalletsHandler');
 const createWallet = require('./handlers/createWalletHandler');
 
 const getRoom = require('./handlers/getRoomHandler');
+const getRooms = require('./handlers/getAllRoomsHandler');
 const createRoom = require('./handlers/createRoomHandler');
+const deleteRoom = require('./handlers/deleteRoomHandler')
 
+const getBooking = require('./handlers/getBookingHandler');
 const rejectBooking = require('./handlers/rejectBookingHandler');
 const acceptBooking = require('./handlers/acceptBookingHandler');
+const deleteBooking = require('./handlers/deleteBookingHandler');
+const getAllBookings = require('./handlers/getAllBookingsHandler');
 const createIntentBook = require('./handlers/createIntentBookHandler');
 
 function getWalletRoute({ controllers, config }) {
@@ -49,17 +54,43 @@ function createRoomRoute({ controllers, config }) {
 function getRoomRoute({ controllers, config }) {
   return {
     method: 'GET',
-    url: '/rooms/:roomId',
+    url: '/rooms/:id',
     schema: getRoom.schema(config),
     handler: getRoom.handler({ config, ...controllers }),
   };
 }
 
+function getAllRoomsRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/rooms',
+    schema: getRooms.schema(config),
+    handler: getRooms.handler({ config, ...controllers }),
+  };
+}
+
+function deleteRoomRoute({ controllers, config }) {
+  return {
+    method: 'DELETE',
+    url: '/rooms/:id',
+    schema: deleteRoom.schema(config),
+    handler: deleteRoom.handler({ config, ...controllers }),
+  };
+}
+
+function getBookingRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/bookings/:id',
+    schema: getBooking.schema(config),
+    handler: getBooking.handler({ config, ...controllers }),
+  };
+}
 
 function rejectBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/bookings/reject/:id',
+    url: '/bookings/:id/reject',
     schema: rejectBooking.schema(config),
     handler: rejectBooking.handler({ config, ...controllers }),
   };
@@ -68,11 +99,12 @@ function rejectBookRoute({ controllers, config }) {
 function acceptBookRoute({ controllers, config }) {
   return {
     method: 'POST',
-    url: '/bookings/accept/:id',
+    url: '/bookings/:id/accept',
     schema: acceptBooking.schema(config),
     handler: acceptBooking.handler({ config, ...controllers }),
   };
 }
+
 
 function createIntentBookRoute({ controllers, config }) {
   return {
@@ -83,6 +115,23 @@ function createIntentBookRoute({ controllers, config }) {
   };
 }
 
+function getBookings({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/bookings',
+    schema: getAllBookings.schema(config),
+    handler: getAllBookings.handler({ config, ...controllers }),
+  };
+}
+
+function deleteBookingRoute({ controllers, config }) {
+  return {
+    method: 'DELETE',
+    url: '/bookings/:id',
+    schema: deleteBooking.schema(config),
+    handler: deleteBooking.handler({ config, ...controllers }),
+  };
+}
 
 module.exports = [
   getWalletRoute,
@@ -90,7 +139,12 @@ module.exports = [
   createWalletRoute,
   createRoomRoute,
   getRoomRoute,
+  deleteRoomRoute,
+  getBookingRoute,
+  getAllRoomsRoute,
+  deleteBookingRoute,
   createIntentBookRoute,
+  getBookings,
   acceptBookRoute,
   rejectBookRoute
 ];

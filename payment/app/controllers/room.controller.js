@@ -1,29 +1,36 @@
-const { TransactionStatus } = require('../ultis');
 const { Room } = require('../models/room');
+const { Wallet } = require('../models/wallet');
+const { TransactionStatus } = require('../ultis');
 const { getContract, toWei } = require('../ultis')
 
-const _changeTransactionStatus = async (transactionHash, newStatus, roomId) => {
+const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Room.findOne({where: {transactionHash: transactionHash}}).then((room) => {
     if (room) {
-      room.update({transactionStatus: newStatus, roomId: roomId}).then(() => {
+      room.update({transactionStatus: newStatus}).then(() => {
         return true;
       });
     }
   });
 };
 
+const _getWallet = async (uuid) => {
+  return Wallet.findOne({ where: {uuid: uuid} }).then((wallet) => {
+    if (wallet) {
+      return wallet.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
 const createRoom = ({ config }) => async (web3, price, ownerId) => {
-  const wallets = await web3.eth.getAccounts();
-  const ownerWallet = wallets[0]
+  const ownerWallet = await _getWallet(ownerId)
 
   const bookbnbContract = await getContract(web3, config.contractAddress);
 
-  console.log('price: ', price);
-  console.log('ownerId ', ownerId);
-
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].createRoom(toWei(price))
-      .send({ from: ownerWallet })
+      .send({ from: ownerWallet.address })
       .on('transactionHash', (hash) => {
         Room.create({
           price: price,
@@ -37,9 +44,12 @@ const createRoom = ({ config }) => async (web3, price, ownerId) => {
       .on('receipt', (r) => {
         console.log('receipt: ', r);
         if (r.events.RoomCreated) {
-          const { roomId } = r.events.RoomCreated.returnValues;
+
+          console.log("ROOM BOOKING RETURN VALUES");
+          console.log(r.events.RoomCreated.returnValues);
+
           _changeTransactionStatus(
-            r.transactionHash, TransactionStatus.confirmed, roomId
+            r.transactionHash, TransactionStatus.confirmed
           );
         }
       })
@@ -57,7 +67,25 @@ const getRoom = async (roomId) => {
   });
 };
 
+const getAllRooms = async () => {
+  return Room.findAll({raw: true}).then((rooms) => {
+    return rooms;
+  });
+}
+
+const deleteRoom = async (roomId) => {
+  return Room.findOne({ where: {id: roomId} }).then((room) => {
+    if (room) {
+      return room.toJSON();
+    } else {
+      return {error: "not found"};
+    }
+  });
+};
+
 module.exports = ({ config }) => ({
   getRoom: getRoom,
+  deleteRoom: deleteRoom,
+  getAllRooms: getAllRooms,
   createRoom: createRoom({ config })
 });
