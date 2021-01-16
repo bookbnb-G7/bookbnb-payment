@@ -16,9 +16,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(1)
+        expect(res.body.uuid).to.be.eql(1);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
         done();
       })
   })
@@ -32,9 +34,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(2)
+        expect(res.body.uuid).to.be.eql(2);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
         done();
       })
   })
@@ -45,9 +49,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(1)
+        expect(res.body.uuid).to.be.eql(1);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
       })
 
     chai.request(url)
@@ -55,9 +61,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(2)
+        expect(res.body.uuid).to.be.eql(2);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
         done();
       })
   })
@@ -72,6 +80,8 @@ describe('Wallet',() => {
           expect(wallet).to.have.property('uuid');
           expect(wallet).to.have.property('address');
           expect(wallet).to.have.property('mnemonic');
+          expect(wallet).to.have.property('balance');
+          expect(wallet.balance).to.be.eql(0.0);
         })
         done();
       })
