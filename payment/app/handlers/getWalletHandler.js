@@ -27,6 +27,10 @@ function schema(_config) {
 function handler({ walletController }) {
   return async function (req, reply) {
     const wallet = await walletController.getWallet(req.params.uuid);
+    if (wallet.error) {
+      reply.code(404).send(wallet);
+      return;
+    }
     walletJSON = wallet.toJSON();
     walletJSON['balance'] = 0.0;
     reply.code(200).send(walletJSON);

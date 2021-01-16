@@ -28,6 +28,10 @@ function schema() {
 function handler({ roomController }) {
   return async function (req, reply) {
     const room = await roomController.getRoom(req.params.id);
+    if (room.error) {
+      reply.code(404).send(room);
+      return;
+    }
     reply.code(200).send(room);
   };
 }

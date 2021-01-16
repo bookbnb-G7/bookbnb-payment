@@ -1,7 +1,7 @@
 function schema(_config) {
   return {
     description: 'Creates a wallet',
-    params: {
+    body: {
       type: 'object',
       properties: {
         uuid: {

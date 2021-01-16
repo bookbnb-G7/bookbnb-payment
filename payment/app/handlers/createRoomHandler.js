@@ -1,7 +1,7 @@
 function schema(_config) {
   return {
     description: 'Creates a room',
-    params: {
+    body: {
       type: 'object',
       properties: {
         ownerId: {

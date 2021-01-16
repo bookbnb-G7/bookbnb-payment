@@ -13,7 +13,7 @@ services:
       - node_modules:/usr/app/app/node_modules
 
     ports:
-      - 5000:8080 # host=5000 --> docker=8080
+      - 4500:8080 # host=4500 --> docker=8080
 
     depends_on:
       - db # first execute database
@@ -22,6 +22,7 @@ services:
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-development}
       DATABASE_URL: sqlite:///./app.db
+      PAYMENT_URL: ${PAYMENT_URL:-localhost:4500}
 
       # just local testing
       URL_WSKT: ws://sc:8545
