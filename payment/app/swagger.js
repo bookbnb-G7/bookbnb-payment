@@ -10,7 +10,7 @@ exports.options = {
       url: 'https://swagger.io',
       description: 'Find more info here'
     },
-    host: 'localhost',
+    host: process.env.PAYMENT_URL,
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json']

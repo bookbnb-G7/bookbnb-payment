@@ -1,7 +1,7 @@
 function schema(_config) {
   return {
     description: 'Creates a booking for a Room',
-    params: {
+    body: {
       type: 'object',
       properties: {
         bookerId: {

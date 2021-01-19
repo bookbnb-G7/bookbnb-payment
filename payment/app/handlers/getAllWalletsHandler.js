@@ -11,6 +11,7 @@ function schema(_config) {
             uuid: { type: 'integer' },
             address: { type: 'string' },
             mnemonic: { type: 'string' },
+            balance: { type: 'number' },
           }
         }
       }
@@ -20,7 +21,8 @@ function schema(_config) {
 
 function handler({ walletController }) {
   return async function (req, reply) {
-    const wallets = await walletController.getAllWallets();
+    // Obtains a raw list of JSON objects
+    let wallets = await walletController.getAllWallets();
     return reply.code(200).send(wallets);
   };
 }

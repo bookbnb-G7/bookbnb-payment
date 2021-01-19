@@ -1,7 +1,7 @@
 function schema(_config) {
   return {
     description: 'Creates a wallet',
-    params: {
+    body: {
       type: 'object',
       properties: {
         uuid: {
@@ -17,6 +17,7 @@ function schema(_config) {
           uuid: { type: 'integer' },
           address: { type: 'string' },
           mnemonic: { type: 'string' },
+          balance: { type: 'number' },
         }
       }
     }
@@ -26,7 +27,9 @@ function schema(_config) {
 function handler({ walletController }) {
   return async function (req, reply) {
     const wallet = await walletController.createWallet(req.body.uuid);
-    return reply.code(201).send(wallet);
+    walletJSON = wallet.toJSON();
+    walletJSON['balance'] = 0.0;
+    return reply.code(201).send(walletJSON);
   };
 }
 

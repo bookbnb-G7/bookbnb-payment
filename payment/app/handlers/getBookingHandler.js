@@ -33,6 +33,10 @@ function schema() {
 function handler({ bookingController }) {
   return async function (req, reply) {
     const booking = await bookingController.getBooking(req.params.id);
+    if (booking.error) {
+      reply.code(404).send(booking);
+      return;
+    }
     reply.code(200).send(booking);
   };
 }

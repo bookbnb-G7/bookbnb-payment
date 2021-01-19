@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "nyc mocha payment/test --color --recursive",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "start": "node payment/app/server.js"
   },
   "author": "gonzalpetraglia@gmail.com",

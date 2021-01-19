@@ -16,9 +16,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(1)
+        expect(res.body.uuid).to.be.eql(1);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
         done();
       })
   })
@@ -32,9 +34,11 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(2)
+        expect(res.body.uuid).to.be.eql(2);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        expect(res.body.balance).to.be.eql(0.0);
         done();
       })
   })
@@ -45,9 +49,12 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(1)
+        expect(res.body.uuid).to.be.eql(1);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        // ganache start balance
+        expect(res.body.balance).to.be.eql(100);
       })
 
     chai.request(url)
@@ -55,9 +62,12 @@ describe('Wallet',() => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
-        expect(res.body.uuid).to.be.eql(2)
+        expect(res.body.uuid).to.be.eql(2);
         expect(res.body).to.have.property('address');
         expect(res.body).to.have.property('mnemonic');
+        expect(res.body).to.have.property('balance');
+        // ganache start balance
+        expect(res.body.balance).to.be.eql(100);
         done();
       })
   })
@@ -72,6 +82,8 @@ describe('Wallet',() => {
           expect(wallet).to.have.property('uuid');
           expect(wallet).to.have.property('address');
           expect(wallet).to.have.property('mnemonic');
+          expect(wallet).to.have.property('balance');
+          expect(wallet.balance).to.be.eql(100);
         })
         done();
       })
@@ -117,7 +129,7 @@ describe('Room',() => {
 
   it('is possible to get the room by the id', (done) => {
     chai.request(url)
-      .get('/rooms/' + 1)
+      .get('/rooms/' + 0)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -128,7 +140,7 @@ describe('Room',() => {
       });
 
     chai.request(url)
-      .get('/rooms/' + 2)
+      .get('/rooms/' + 1)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -161,7 +173,7 @@ describe('Bookings', () => {
   it('should return a new booking when created', (done) => {
     const bookingPayload = {
       bookerId: 1,
-      roomId: 2,
+      roomId: 1,
       dateFrom: '01-01-2021',
       dateTo: '04-01-2021'
     }
@@ -196,7 +208,7 @@ describe('Bookings', () => {
   it('is possible to create another booking', (done) => {
     const anotherBookingPayload = {
       bookerId: 1,
-      roomId: 2,
+      roomId: 1,
       dateFrom: '06-01-2021',
       dateTo: '10-01-2021'
     }
