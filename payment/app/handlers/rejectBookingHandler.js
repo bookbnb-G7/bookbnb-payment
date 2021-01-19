@@ -4,15 +4,20 @@ function schema(_config) {
     params: {
       type: 'object',
       properties: {
-        bookingId: {
+        id: {
           type: 'integer',
         },
+      },
+    },
+    body: {
+      type: 'object',
+      properties: {
         roomOwnerId: {
           type: 'integer',
         },
       },
     },
-    required: ['bookingId', 'roomOwnerId'],
+    required: ['id', 'roomOwnerId'],
     response: {
       200: {
         type: 'object',
