@@ -129,7 +129,7 @@ describe('Room',() => {
 
   it('is possible to get the room by the id', (done) => {
     chai.request(url)
-      .get('/rooms/' + 1)
+      .get('/rooms/' + 0)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -140,7 +140,7 @@ describe('Room',() => {
       });
 
     chai.request(url)
-      .get('/rooms/' + 2)
+      .get('/rooms/' + 1)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -173,7 +173,7 @@ describe('Bookings', () => {
   it('should return a new booking when created', (done) => {
     const bookingPayload = {
       bookerId: 1,
-      roomId: 2,
+      roomId: 1,
       dateFrom: '01-01-2021',
       dateTo: '04-01-2021'
     }
@@ -208,7 +208,7 @@ describe('Bookings', () => {
   it('is possible to create another booking', (done) => {
     const anotherBookingPayload = {
       bookerId: 1,
-      roomId: 2,
+      roomId: 1,
       dateFrom: '06-01-2021',
       dateTo: '10-01-2021'
     }

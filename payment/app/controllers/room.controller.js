@@ -25,32 +25,35 @@ const _getWallet = async (uuid) => {
 
 const createRoom = ({ config }) => async (web3, price, ownerId) => {
   const ownerWallet = await _getWallet(ownerId)
-
   const bookbnbContract = await getContract(web3, config.contractAddress);
+
+  let id = 0;
+  if (process.env.ENVIRONMENT === "testing") {
+    id = (await Room.findAll({raw: true})).length;
+  }
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].createRoom(toWei(price))
       .send({ from: ownerWallet.address })
-      .on('transactionHash', (hash) => {
-        Room.create({
-          price: price,
-          ownerId: ownerId,
-          transactionHash: hash,
-          transactionStatus: TransactionStatus.pending,
-        }).then((newRoom) => {
-          return resolve(newRoom.toJSON());
-        });
-      })
       .on('receipt', (r) => {
-        console.log('receipt: ', r);
-        if (r.events.RoomCreated) {
+        if (process.env.ENVIRONMENT === 'testing' || r.events.RoomCreated) {
 
-          console.log("ROOM BOOKING RETURN VALUES");
-          console.log(r.events.RoomCreated.returnValues);
+          if (process.env.ENVIRONMENT !== 'testing') {
+            const { roomId } = r.events.returnValues;
+            id = roomId;
+          }
 
-          _changeTransactionStatus(
-            r.transactionHash, TransactionStatus.confirmed
-          );
+          Room.create({
+            id: id,
+            price: price,
+            ownerId: ownerId,
+            transactionHash: r.transactionHash,
+            transactionStatus: TransactionStatus.confirmed,
+          }).then((newRoom) => {
+            return resolve(newRoom.toJSON());
+          }).catch((error) => {
+            return reject(error);
+          });
         }
       })
       .on('error', (err) => reject(err));
