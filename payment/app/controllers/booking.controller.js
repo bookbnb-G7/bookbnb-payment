@@ -1,8 +1,8 @@
 const { Room } = require('../models/room');
 const { Wallet } = require('../models/wallet');
-const { TransactionStatus } = require('../ultis');
+const { TransactionStatus } = require('../utils');
 const { Booking, BookingStatus } = require('../models/booking');
-const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../ultis');
+const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../utils');
 
 const _changeTransactionStatus = async (bookingId, newStatus) => {
   Booking.findOne({where: {id: bookingId}}).then((booking) => {

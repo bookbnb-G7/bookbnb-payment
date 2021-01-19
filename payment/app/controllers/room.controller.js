@@ -1,7 +1,7 @@
 const { Room } = require('../models/room');
 const { Wallet } = require('../models/wallet');
-const { TransactionStatus } = require('../ultis');
-const { getContract, toWei } = require('../ultis')
+const { TransactionStatus } = require('../utils');
+const { getContract, toWei } = require('../utils')
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Room.findOne({where: {transactionHash: transactionHash}}).then((room) => {

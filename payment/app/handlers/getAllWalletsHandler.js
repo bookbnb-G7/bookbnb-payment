@@ -23,9 +23,6 @@ function handler({ walletController }) {
   return async function (req, reply) {
     // Obtains a raw list of JSON objects
     let wallets = await walletController.getAllWallets();
-    for (wallet in wallets) {
-      wallets[wallet]['balance'] = 0.0;
-    }
     return reply.code(200).send(wallets);
   };
 }

@@ -1,3 +1,5 @@
+const { getBalance } = require('../utils')
+
 function schema(_config) {
   return {
     description: 'Returns a wallet',
@@ -27,13 +29,13 @@ function schema(_config) {
 function handler({ walletController }) {
   return async function (req, reply) {
     const wallet = await walletController.getWallet(req.params.uuid);
-    if (wallet.error) {
+
+    if (wallet['error']) {
       reply.code(404).send(wallet);
       return;
     }
-    walletJSON = wallet.toJSON();
-    walletJSON['balance'] = 0.0;
-    reply.code(200).send(walletJSON);
+
+    reply.code(200).send(wallet);
   };
 }
 
