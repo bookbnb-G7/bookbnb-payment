@@ -243,8 +243,8 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
         return resolve(booking);
       }
 
-      if (r.events.RoomBooked) {
-        console.log('events', r.events.RoomBooked);
+      if (r.events.BookIntentRejected) {
+        console.log('events', r.events.BookIntentRejected);
         _changeBookingStatus(booking.id, BookingStatus.rejected);
         _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.rejected;
