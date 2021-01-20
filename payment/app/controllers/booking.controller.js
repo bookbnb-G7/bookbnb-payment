@@ -98,7 +98,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
 
       if (r.events.BookIntentCreated) { // && _checkEventDate(r.events.BookIntentCreated, dateTo)) {
 
-        console.log(r.events.BookIntentCreated);
+        console.log(r.events.BookIntentCreated.returnValues);
 
         _changeTransactionStatus(
           r.transactionHash,
