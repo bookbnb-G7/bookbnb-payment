@@ -70,7 +70,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
-      roomId - 1,
+      roomId,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
@@ -174,7 +174,7 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].acceptBatch(
-      booking.roomId - 1,
+      booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
@@ -227,7 +227,7 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].rejectBatch(
-      booking.roomId - 1,
+      booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
