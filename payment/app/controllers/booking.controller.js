@@ -24,14 +24,6 @@ const _changeBookingStatus = async (bookingId, newStatus) => {
   });
 };
 
-const _checkEventDate = (eventToCheck, date) => {
-  const { day, month, year } = eventToCheck.returnValues;
-
-  return date.getDate() === day &&
-         date.getMonth() + 1 === month &&
-         date.getFullYear() === year;
-}
-
 const _getRoom = async (roomId) => {
   return Room.findOne({ where: {id: roomId} }).then((room) => {
     if (room) {
@@ -94,17 +86,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
       })
     })
     .on('receipt', (r) => {
-      //console.log('events: ', r.events);
-
-      if (r.events.BookIntentCreated) { // && _checkEventDate(r.events.BookIntentCreated, dateTo)) {
-
-        console.log('events: ', r.events);
-        console.log("\n")
-        console.log('BookIntentCreated', r.events.BookIntentCreated)
-
-        const { day } = r.events.BookIntentCreated.returnValues;
-        console.log("DAY: ", day);
-
+      if (r.events.BookIntentCreated) {
         _changeTransactionStatus(
           r.transactionHash,
           TransactionStatus.confirmed
@@ -207,8 +189,6 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
-      console.log('events: ', r.events);
-
       if (process.env.ENVIRONMENT === 'testing') {
         _changeBookingStatus(booking.id, BookingStatus.rejected);
         booking.bookingStatus = BookingStatus.rejected;
@@ -216,7 +196,6 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
       }
 
       if (r.events.BookIntentRejected) {
-        console.log('events', r.events.BookIntentRejected);
         _changeBookingStatus(booking.id, BookingStatus.rejected);
         booking.bookingStatus = BookingStatus.rejected;
         return resolve(booking);
