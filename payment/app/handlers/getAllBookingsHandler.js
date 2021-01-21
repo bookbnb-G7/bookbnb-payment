@@ -1,6 +1,12 @@
+const { apiKeyIsNotValid } = require('../utils');
+
 function schema() {
   return {
     description: 'Returns a list of pending bookings of a room owner',
+    headers: {
+      type: 'object',
+      properties: { "api-key": { type: 'string' } }
+    },
     querystring: {
       type: 'object',
       properties: {
@@ -43,6 +49,11 @@ function schema() {
 
 function handler({ bookingController }) {
   return async function (req, reply) {
+
+    if (apiKeyIsNotValid(req.headers['api-key'])) {
+      return reply.code(401).send({ error: "unauthorized" });
+    }
+
     const bookings = await bookingController.getBookings(req.query);
     reply.code(200).send(bookings);
   };
