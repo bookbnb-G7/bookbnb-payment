@@ -11,7 +11,7 @@ exports.options = {
       description: 'Find more info here'
     },
     host: process.env.PAYMENT_URL,
-    schemes: ['http'],
+    schemes: ['https', 'http'],
     consumes: ['application/json'],
     produces: ['application/json']
   }

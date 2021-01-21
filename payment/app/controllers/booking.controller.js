@@ -4,8 +4,8 @@ const { TransactionStatus } = require('../utils');
 const { Booking, BookingStatus } = require('../models/booking');
 const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../utils');
 
-const _changeTransactionStatus = async (bookingId, newStatus) => {
-  Booking.findOne({where: {id: bookingId}}).then((booking) => {
+const _changeTransactionStatus = async (transactionHash, newStatus) => {
+  Booking.findOne({where: {transactionHash: transactionHash}}).then((booking) => {
     if (booking) {
       booking.update({transactionStatus: newStatus}).then(() => {
         return true;
@@ -23,11 +23,6 @@ const _changeBookingStatus = async (bookingId, newStatus) => {
     }
   });
 };
-
-const _checkEventDate = async (eventToCheck, date) => {
-  const { day, month, year } = eventToCheck.returnValues;
-  return new Date(year, month, day) === date;
-}
 
 const _getRoom = async (roomId) => {
   return Room.findOne({ where: {id: roomId} }).then((room) => {
@@ -59,18 +54,9 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   const days = daysBetween(dateFrom, dateTo) + 1;
   const bookingPrice = targetRoom.price * days;
 
-  console.log('bookingPrice');
-  console.log(bookingPrice);
-
-  console.log('dateFrom: ', dateFrom);
-  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
-
-  console.log('dateTo: ', dateTo);
-  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
-
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
-      roomId - 1,
+      roomId,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
@@ -100,11 +86,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
       })
     })
     .on('receipt', (r) => {
-      if (r.events.BookIntentCreated && _checkEventDate(r.events.BookIntentCreated, dateTo)) {
-
-        console.log("ROOM BOOKING RETURN VALUES");
-        console.log(r.events.BookIntentCreated.returnValues);
-
+      if (r.events.BookIntentCreated) {
         _changeTransactionStatus(
           r.transactionHash,
           TransactionStatus.confirmed
@@ -160,21 +142,9 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
   const dateFrom = sqlDateonlyToDate(booking.dateFrom);
   const dateTo = sqlDateonlyToDate(booking.dateTo);
 
-  console.log('booker wallet');
-  console.log(bookerWallet);
-
-  console.log('owner wallet');
-  console.log(ownerWallet);
-
-  console.log('dateFrom: ', dateFrom);
-  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
-
-  console.log('dateTo: ', dateTo);
-  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
-
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].acceptBatch(
-      booking.roomId - 1,
+      booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
@@ -185,14 +155,12 @@ const acceptBooking = ({ config }) => async (web3, bookingId) => {
 
       if (process.env.ENVIRONMENT === 'testing') {
         _changeBookingStatus(bookingId, BookingStatus.accepted);
-        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.accepted;
         return resolve(booking);
       }
 
       if (r.events.RoomBooked) {
         _changeBookingStatus(bookingId, BookingStatus.accepted);
-        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.accepted;
         return resolve(booking);
       }
@@ -212,41 +180,23 @@ const rejectBooking = ({ config }) => async (web3, bookingId) => {
   const dateFrom = sqlDateonlyToDate(booking.dateFrom);
   const dateTo = sqlDateonlyToDate(booking.dateTo);
 
-  console.log('booker wallet');
-  console.log(bookerWallet);
-
-  console.log('owner wallet');
-  console.log(ownerWallet);
-
-  console.log('dateFrom: ', dateFrom);
-  console.log(dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear());
-
-  console.log('dateTo: ', dateTo);
-  console.log(dateTo.getDate(), dateTo.getMonth(), dateTo.getFullYear());
-
-
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].rejectBatch(
-      booking.roomId - 1,
+      booking.roomId,
       bookerWallet.address,
       dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear(),
       dateTo.getDate(), dateTo.getMonth() + 1, dateTo.getFullYear()
     )
     .send({ from: ownerWallet.address })
     .on('receipt', (r) => {
-      console.log('events: ', r.events);
-
       if (process.env.ENVIRONMENT === 'testing') {
         _changeBookingStatus(booking.id, BookingStatus.rejected);
-        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.rejected;
         return resolve(booking);
       }
 
-      if (r.events.RoomBooked) {
-        console.log('events', r.events.RoomBooked);
+      if (r.events.BookIntentRejected) {
         _changeBookingStatus(booking.id, BookingStatus.rejected);
-        _changeTransactionStatus(bookingId, TransactionStatus.confirmed);
         booking.bookingStatus = BookingStatus.rejected;
         return resolve(booking);
       }

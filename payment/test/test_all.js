@@ -290,7 +290,7 @@ describe('Bookings', () => {
       .post('/bookings/' + 1 + '/accept')
       .send({ roomOwnerId: 2 })
       .end((err, res) => {
-        expect(res).to.have.status(201);
+        expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('price');
         expect(res.body).to.have.property('roomId');
@@ -311,7 +311,7 @@ describe('Bookings', () => {
       .post('/bookings/' + 2 + '/reject')
       .send({roomOwnerId: 2})
       .end((err, res) => {
-        expect(res).to.have.status(201);
+        expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('price');
         expect(res.body).to.have.property('roomId');
