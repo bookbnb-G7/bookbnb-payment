@@ -20,6 +20,7 @@ services:
       - sc # and execute smart contract
 
     environment:
+      API_KEY: fake_api_key
       ENVIRONMENT: ${ENVIRONMENT:-development}
       DATABASE_URL: sqlite:///./app.db
       PAYMENT_URL: ${PAYMENT_URL:-localhost:4500}

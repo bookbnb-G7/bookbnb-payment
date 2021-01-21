@@ -1,6 +1,12 @@
+const { apiKeyIsNotValid } = require('../utils');
+
 function schema(_config) {
   return {
     description: 'Creates a booking for a Room',
+    headers: {
+      type: 'object',
+      properties: { "api-key": { type: 'string' } }
+    },
     body: {
       type: 'object',
       properties: {
@@ -41,6 +47,11 @@ function schema(_config) {
 
 function handler({ bookingController, walletController }) {
   return async function (req, reply) {
+
+    if (apiKeyIsNotValid(req.headers['api-key'])) {
+      return reply.code(401).send({ error: "unauthorized" });
+    }
+
     const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 
     let dateFromSplit = req.body.dateFrom.split("-");

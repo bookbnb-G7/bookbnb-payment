@@ -37,6 +37,14 @@ const TransactionStatus = Object.freeze({
   'denied': 3
 });
 
+const apiKeyIsNotValid = (api_key) => {
+  if (!api_key || api_key != process.env.API_KEY) {
+    return true;
+  }
+
+  return false;
+}
+
 
 module.exports = {
   toWei,
@@ -44,5 +52,6 @@ module.exports = {
   getContract,
   daysBetween,
   sqlDateonlyToDate,
+  apiKeyIsNotValid,
   TransactionStatus,
 }

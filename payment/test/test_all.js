@@ -5,6 +5,7 @@ const { BookingStatus } = require('../app/models/booking');
 chai.use(chaiHttp);
 const expect = chai.expect;
 const url = 'http://localhost:8080';
+const api_key = 'fake_api_key';
 
 describe('Wallet',() => {
   it('should return a new wallet when created', (done) => {
@@ -12,6 +13,7 @@ describe('Wallet',() => {
 
     chai.request(url)
       .post('/wallets')
+			.set('api-key', api_key)
       .send(walletPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -30,6 +32,7 @@ describe('Wallet',() => {
 
     chai.request(url)
       .post('/wallets')
+			.set('api-key', api_key)
       .send(anotherWalletPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -46,6 +49,7 @@ describe('Wallet',() => {
   it('is possible to get wallet by the uuid', (done) => {
     chai.request(url)
       .get('/wallets/' + 1)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
@@ -59,6 +63,7 @@ describe('Wallet',() => {
 
     chai.request(url)
       .get('/wallets/' + 2)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('uuid');
@@ -75,6 +80,7 @@ describe('Wallet',() => {
   it('is possible to get all wallets', (done) => {
     chai.request(url)
       .get('/wallets')
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(2);
@@ -98,6 +104,7 @@ describe('Room',() => {
 
     chai.request(url)
       .post('/rooms')
+			.set('api-key', api_key)
       .send(roomPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -115,6 +122,7 @@ describe('Room',() => {
 
     chai.request(url)
       .post('/rooms')
+			.set('api-key', api_key)
       .send(roomPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -130,6 +138,7 @@ describe('Room',() => {
   it('is possible to get the room by the id', (done) => {
     chai.request(url)
       .get('/rooms/' + 0)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -141,6 +150,7 @@ describe('Room',() => {
 
     chai.request(url)
       .get('/rooms/' + 1)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -155,6 +165,7 @@ describe('Room',() => {
   it('is possible to get all room', (done) => {
     chai.request(url)
       .get('/rooms')
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(2);
@@ -186,6 +197,7 @@ describe('Bookings', () => {
 
     chai.request(url)
       .post('/bookings')
+			.set('api-key', api_key)
       .send(bookingPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -221,6 +233,7 @@ describe('Bookings', () => {
 
     chai.request(url)
       .post('/bookings')
+			.set('api-key', api_key)
       .send(anotherBookingPayload)
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -244,6 +257,7 @@ describe('Bookings', () => {
     chai.request(url)
       .get('/bookings?' + 'roomOwnerId=' + 2 +
            '&' + 'bookingStatus=' + BookingStatus.pending)
+      .set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(2);
@@ -268,6 +282,7 @@ describe('Bookings', () => {
   it('is possible to get a booking by the id', (done) => {
     chai.request(url)
       .get('/bookings/' + 1)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('id');
@@ -288,6 +303,7 @@ describe('Bookings', () => {
   it('is possible to accept a pending booking', (done) => {
     chai.request(url)
       .post('/bookings/' + 1 + '/accept')
+			.set('api-key', api_key)
       .send({ roomOwnerId: 2 })
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -309,6 +325,7 @@ describe('Bookings', () => {
   it('is possible to reject a pending booking', (done) =>  {
     chai.request(url)
       .post('/bookings/' + 2 + '/reject')
+			.set('api-key', api_key)
       .send({roomOwnerId: 2})
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -331,6 +348,7 @@ describe('Bookings', () => {
     chai.request(url)
       .get('/bookings?' + 'roomOwnerId=' + 2 +
         '&' + 'bookingStatus=' + BookingStatus.pending)
+			.set('api-key', api_key)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.length).to.be.eql(0);
