@@ -39,7 +39,6 @@ const createRoom = ({ config }) => async (web3, price, ownerId) => {
         console.log(r);
 
         if (process.env.ENVIRONMENT === 'testing' || r.events.RoomCreated) {
-
           if (process.env.ENVIRONMENT !== 'testing') {
             const { roomId } = r.events.RoomCreated.returnValues;
             id = roomId;
