@@ -15,6 +15,14 @@ fastify.register(require('fastify-swagger'), swagger.options)
 // Declares routes
 routes.forEach((route) => fastify.route(route({ config, controllers })));
 
+
+fastify.setErrorHandler((error, request, reply) => {
+  // Send error response
+  let err = { error: error['message'].split("\n")[0] };
+
+  return reply.code(500).send(err);
+})
+
 // Run the server!
 database.sync().then(async () => {
     try {

@@ -93,9 +93,15 @@ const _getRawWeb3 = (config) => {
   return new Web3(provider);
 }
 
+const walletExists = ({ config }) => async (uuid) =>{
+  let wallet = await Wallet.findOne({ where: {uuid: uuid} });
+  return wallet != null;
+}
+
 module.exports = ({ config }) => ({
   getWallet: getWallet({config}),
   createWallet: createWallet({config}),
   getAllWallets: getAllWallets({ config}),
   getWeb3WithWallet: getWeb3WithWallet({config}),
+  walletExists: walletExists({ config }),
 });
