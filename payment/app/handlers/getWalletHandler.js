@@ -24,18 +24,30 @@ function schema(_config) {
           address: { type: 'string' },
           mnemonic: { type: 'string' },
           balance: { type: 'number' },
+          createdAt: { type: 'string' },
+          updatedAt: { type: 'string' },
         }
       }
     }
   };
 }
 
+async function findRequestErrors(req) {
+  // Check api-key
+  if (apiKeyIsNotValid(req.headers['api-key'])) {
+    return { code: 401, error: "unauthorized" };
+  }
+
+  return null;
+}
+
 function handler({ walletController }) {
   return async function (req, reply) {
 
-    if (apiKeyIsNotValid(req.headers['api-key'])) {
-      return reply.code(401).send({ error: "unauthorized" });
-    }
+    // Check request errors
+    let error = await findRequestErrors(req);
+    if (error)
+      return reply.code(error["code"]).send({ error: error["error"] });
     
     const wallet = await walletController.getWallet(req.params.uuid);
 

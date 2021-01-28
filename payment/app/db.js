@@ -17,8 +17,7 @@ if (ENVIRONMENT === 'production') {
         rejectUnauthorized: false
       }
     },
-    operatorsAliases: Sequelize.Op,
-    define: {timestamp: false}
+    operatorsAliases: Sequelize.Op
   })
 }
 
@@ -26,7 +25,6 @@ if (ENVIRONMENT === 'development') {
   database = new Sequelize(DATABASE_URL ,{
     dialect: 'sqlite',
     operatorsAliases: Sequelize.Op,
-    define: {timestamp: false},
     storage: './app.db'
   })
 
@@ -35,8 +33,7 @@ if (ENVIRONMENT === 'development') {
 if (ENVIRONMENT === 'testing') {
   database = new Sequelize(TESTING_DB_URL ,{
     dialect: 'sqlite',
-    operatorsAliases: Sequelize.Op,
-    define: {timestamp: false}
+    operatorsAliases: Sequelize.Op
   })
 }
 

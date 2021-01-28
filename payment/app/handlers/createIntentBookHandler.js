@@ -1,4 +1,4 @@
-const { apiKeyIsNotValid } = require('../utils');
+const { apiKeyIsNotValid, payloadIsCorrect } = require('../utils');
 
 function schema(_config) {
   return {
@@ -39,18 +39,76 @@ function schema(_config) {
           bookingStatus: { type: 'integer' },
           transactionStatus: { type: 'integer' },
           transactionHash: { type: 'string' },
+          createdAt: { type: 'string' },
+          updatedAt: { type: 'string' },
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' },
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' },
+        }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' },
         }
       }
     },
   };
 }
 
-function handler({ bookingController, walletController }) {
+async function findRequestErrors(req, bookingController, roomController, walletController) {
+  if (apiKeyIsNotValid(req.headers['api-key'])) {
+    return { code: 401, error: "unauthorized" };
+  }
+
+  // Check payload
+  let attrsToCheck = {
+    "bookerId": { "type": "number", "isInteger": true, "min": 0 },
+    "roomId":  { "type": "number", "isInteger": true, "min": 0 },
+    "dateFrom": { "type": "string", "isDate": true },
+    "dateTo": { "type": "string", "isDate": true },
+  }
+  let err = payloadIsCorrect(req.body, attrsToCheck);
+  if (err) {
+    return { code: 400, error: error };
+  }
+
+  // Check wallet exists
+  let walletExists = await walletController.walletExists(req.body.bookerId);
+  if (!walletExists) {
+    return { code: 404, error: "bookerId was not found" };
+  }
+
+  // Check room exists
+  let roomExists = await roomController.roomExists(req.body.roomId);
+  if (!roomExists) {
+    return { code: 404, error: "roomId was not found" };
+  }
+
+  // Check room is not booked on that dates
+  let bookingsOnSameDate = await bookingController.bookingsOnSameDate(req.body.roomId, req.body.dateFrom, req.body.dateTo)
+  if (bookingsOnSameDate != 0)
+    return { code: 400, error: "room is already booked on that date period "};
+
+  return null;
+}
+
+function handler({ bookingController, roomController, walletController }) {
   return async function (req, reply) {
 
-    if (apiKeyIsNotValid(req.headers['api-key'])) {
-      return reply.code(401).send({ error: "unauthorized" });
-    }
+    // Check request errors
+    let error = await findRequestErrors(req, bookingController, roomController, walletController);
+    if (error)
+      return reply.code(error["code"]).send({ error: error["error"] });
 
     const wallet = await walletController.getWeb3WithWallet(req.body.bookerId);
 

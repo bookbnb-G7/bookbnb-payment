@@ -135,6 +135,21 @@ describe('Room',() => {
       });
   })
 
+  it('is possible to create another room with invalid owner id', (done) => {
+    const roomPayload = { ownerId: 3, price: 10 }
+
+    chai.request(url)
+      .post('/rooms')
+			.set('api-key', api_key)
+      .send(roomPayload)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.be.eql('ownerId was not found');
+        done();
+      });
+  })
+
   it('is possible to get the room by the id', (done) => {
     chai.request(url)
       .get('/rooms/' + 0)
@@ -178,6 +193,29 @@ describe('Room',() => {
         done();
       })
   })
+
+  it('is possible to delete a room', (done) => {
+    chai.request(url)
+      .delete('/rooms/' + 0)
+			.set('api-key', api_key)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('id');
+        expect(res.body).to.have.property('price');
+        expect(res.body).to.have.property('ownerId');
+        expect(res.body).to.have.property('transactionHash');
+        expect(res.body.ownerId).to.be.eql(1);
+        chai.request(url)
+          .get('/rooms/' + 0)
+          .set('api-key', api_key)
+          .end((err, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.have.property('error');
+            done();
+          })
+      })
+  })
+
 })
 
 describe('Bookings', () => {
@@ -217,6 +255,25 @@ describe('Bookings', () => {
       })
   })
 
+  it('should fail to book a room already booked', (done) => {
+    const bookingPayload = {
+      bookerId: 1,
+      roomId: 1,
+      dateFrom: '01-01-2021',
+      dateTo: '04-01-2021'
+    }
+
+    chai.request(url)
+      .post('/bookings')
+			.set('api-key', api_key)
+      .send(bookingPayload)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('error');
+        done();
+      })
+  })
+
   it('is possible to create another booking', (done) => {
     const anotherBookingPayload = {
       bookerId: 1,
@@ -249,6 +306,25 @@ describe('Bookings', () => {
         expect(res.body).to.have.property('bookingStatus');
         expect(res.body).to.have.property('transactionStatus');
         expect(res.body).to.have.property('transactionHash');
+        done();
+      })
+  })
+
+  it('is not possible to create a booking too long', (done) => {
+    const anotherBookingPayload = {
+      bookerId: 1,
+      roomId: 1,
+      dateFrom: '06-01-2021',
+      dateTo: '10-01-2027'
+    }
+
+    chai.request(url)
+      .post('/bookings')
+			.set('api-key', api_key)
+      .send(anotherBookingPayload)
+      .end((err, res) => {
+        expect(res).to.have.status(500);
+        expect(res.body).to.have.property('error');
         done();
       })
   })
@@ -322,6 +398,18 @@ describe('Bookings', () => {
       })
   })
 
+  it('is not possible to accept a non pending booking', (done) => {
+    chai.request(url)
+      .post('/bookings/' + 1 + '/accept')
+			.set('api-key', api_key)
+      .send({ roomOwnerId: 2 })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('error');
+        done();
+      })
+  })
+
   it('is possible to reject a pending booking', (done) =>  {
     chai.request(url)
       .post('/bookings/' + 2 + '/reject')
@@ -340,6 +428,18 @@ describe('Bookings', () => {
         expect(res.body).to.have.property('transactionStatus');
         expect(res.body).to.have.property('transactionHash');
         expect(res.body.bookingStatus).to.be.eql(BookingStatus.rejected);
+        done();
+      })
+  })
+
+  it('is not possible to reject a non pending booking', (done) =>  {
+    chai.request(url)
+      .post('/bookings/' + 2 + '/reject')
+			.set('api-key', api_key)
+      .send({roomOwnerId: 2})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('error');
         done();
       })
   })

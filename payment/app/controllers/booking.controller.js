@@ -3,6 +3,7 @@ const { Wallet } = require('../models/wallet');
 const { TransactionStatus } = require('../utils');
 const { Booking, BookingStatus } = require('../models/booking');
 const { toWei, getContract, daysBetween, sqlDateonlyToDate } = require('../utils');
+const { Op } = require("sequelize");
 
 const _changeTransactionStatus = async (transactionHash, newStatus) => {
   Booking.findOne({where: {transactionHash: transactionHash}}).then((booking) => {
@@ -215,6 +216,34 @@ const deleteBooking = async (bookingId) => {
   });
 }
 
+const bookingsOnSameDate = ({ config }) => async (roomId, searchDateFrom, searchDateTo) =>{
+  let bookingsCond1 = await Booking.findAll({ where: {
+                                                  roomId: roomId,
+                                                  dateFrom: { [Op.gte]: searchDateFrom },
+                                                  dateTo: { [Op.lte]: searchDateTo },
+                                                  bookingStatus: { [Op.ne]: 3 },
+                                                } });
+  
+  let bookingsCond2 = await Booking.findAll({ where: {
+                                                  roomId: roomId,
+                                                  dateFrom: { [Op.lte]: searchDateFrom },
+                                                  dateTo: { [Op.gte]: searchDateFrom },
+                                                  bookingStatus: { [Op.ne]: 3 },
+                                                } });
+
+  let bookingsCond3 = await Booking.findAll({ where: {
+                                                  roomId: roomId,
+                                                  dateFrom: { [Op.lte]: searchDateTo },
+                                                  dateTo: { [Op.gte]: searchDateTo },
+                                                  bookingStatus: { [Op.ne]: 3 },
+                                                } });
+                                                
+  let bookings = [...bookingsCond1, ...bookingsCond2];
+  bookings = [...bookings, ...bookingsCond3];
+  return bookings.length;
+}
+
+
 module.exports = ({ config }) => ({
   getBooking: getBooking,
   getBookings: getBookings,
@@ -222,4 +251,5 @@ module.exports = ({ config }) => ({
   acceptBooking: acceptBooking({ config }),
   rejectBooking: rejectBooking({ config }),
   createIntentBook: createIntentBook({ config }),
+  bookingsOnSameDate: bookingsOnSameDate({ config }),
 });
