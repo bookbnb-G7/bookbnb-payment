@@ -223,8 +223,8 @@ describe('Bookings', () => {
     const bookingPayload = {
       bookerId: 1,
       roomId: 1,
-      dateFrom: '01-01-2021',
-      dateTo: '04-01-2021'
+      dateFrom: '15-01-2021',
+      dateTo: '18-01-2021'
     }
 
     // user 1 books room 2,
@@ -259,8 +259,8 @@ describe('Bookings', () => {
     const bookingPayload = {
       bookerId: 1,
       roomId: 1,
-      dateFrom: '01-01-2021',
-      dateTo: '04-01-2021'
+      dateFrom: '15-01-2021',
+      dateTo: '18-01-2021'
     }
 
     chai.request(url)
@@ -314,8 +314,8 @@ describe('Bookings', () => {
     const anotherBookingPayload = {
       bookerId: 1,
       roomId: 1,
-      dateFrom: '06-01-2021',
-      dateTo: '10-01-2027'
+      dateFrom: '26-01-2021',
+      dateTo: '30-01-2027'
     }
 
     chai.request(url)
