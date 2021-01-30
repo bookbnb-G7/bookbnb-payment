@@ -49,25 +49,25 @@ const payloadAttrIsValid = (payloadAttr, thingsToCheck, attrName) => {
   let error = null;
 
   if (!error && thingsToCheck["type"] && (typeof payloadAttr !== thingsToCheck["type"]))
-    error = `Error in payload, ${attrName} should be a ${thingsToCheck["type"]}`;
+    error = `Error in payload, ${attrName} with the value ${payloadAttr} should be a ${thingsToCheck["type"]}`;
   
   if (!error && thingsToCheck["min"] && payloadAttr < thingsToCheck["min"])
-    error = `Error in payload, ${attrName} should be bigger than ${thingsToCheck["min"]}`;
+    error = `Error in payload, ${attrName} with the value ${payloadAttr} should be bigger than ${thingsToCheck["min"]}`;
 
   if (!error && thingsToCheck["max"] && payloadAttr > thingsToCheck["max"])
-    error = `Error in payload, ${attrName} should be less than ${thingsToCheck["max"]}`;
+    error = `Error in payload, ${attrName} with the value ${payloadAttr} should be less than ${thingsToCheck["max"]}`;
 
   if (!error && thingsToCheck["isInteger"] === true && (payloadAttr % 1 !== 0))
-    error = `Error in payload, ${attrName} should be shorter than ${thingsToCheck["length"]}`;
+    error = `Error in payload, ${attrName} with the value ${payloadAttr} should be shorter than ${thingsToCheck["length"]}`;
 
   if (!error && thingsToCheck["isDate"] === true) {
     let dateSplit = payloadAttr.split("-");
     if (dateSplit.length !== 3 || isNaN(new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0])))
-      error = `Error in payload, ${attrName} should be a date-like string with the format YYYY-MM-DD`
+      error = `Error in payload, ${attrName} with the value ${payloadAttr} should be a date-like string with the format YYYY-MM-DD`
   } 
 
   if (!error && thingsToCheck["length"] && payloadAttr.length > thingsToCheck["length"])
-    error = `Error in payload, ${attrName} should be shorter than ${thingsToCheck["length"]}`;
+    error = `Error in payload, ${attrName} with the value ${payloadAttr} should be shorter than ${thingsToCheck["length"]}`;
 
   return error;
 }
