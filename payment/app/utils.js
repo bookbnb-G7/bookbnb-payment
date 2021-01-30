@@ -60,8 +60,11 @@ const payloadAttrIsValid = (payloadAttr, thingsToCheck, attrName) => {
   if (!error && thingsToCheck["isInteger"] === true && (payloadAttr % 1 !== 0))
     error = `Error in payload, ${attrName} should be shorter than ${thingsToCheck["length"]}`;
 
-  if (!error && thingsToCheck["isDate"] === true && isNaN(new Date(payloadAttr)))
-    error = `Error in payload, ${attrName} should be a date-like string with the format YYYY-MM-DD`
+  if (!error && thingsToCheck["isDate"] === true) {
+    let dateSplit = payloadAttr.split("-");
+    if (dateSplit.length !== 3 || isNaN(new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0])))
+      error = `Error in payload, ${attrName} should be a date-like string with the format YYYY-MM-DD`
+  } 
 
   if (!error && thingsToCheck["length"] && payloadAttr.length > thingsToCheck["length"])
     error = `Error in payload, ${attrName} should be shorter than ${thingsToCheck["length"]}`;
