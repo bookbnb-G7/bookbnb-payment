@@ -95,7 +95,13 @@ async function findRequestErrors(req, bookingController, roomController, walletC
   }
 
   // Check room is not booked on that dates
-  let bookingsOnSameDate = await bookingController.bookingsOnSameDate(req.body.roomId, req.body.dateFrom, req.body.dateTo)
+
+  let dateFrom = req.body.dateFrom.split("-");
+  dateFrom = dateFrom[2] + "-" + dateFrom[1] + "-" + dateFrom[0];
+  let dateTo = req.body.dateTo.split("-");
+  dateTo = dateTo[2] + "-" + dateTo[1] + "-" + dateTo[0];
+
+  let bookingsOnSameDate = await bookingController.bookingsOnSameDate(req.body.roomId, dateFrom, dateTo)
   if (bookingsOnSameDate != 0)
     return { code: 400, error: "room is already booked on that date period "};
 
