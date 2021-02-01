@@ -9,7 +9,7 @@ const fastify = require('fastify')({ logger: true });
 // Import CORS
 fastify.register(require('fastify-cors'), {
   origin: true,
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization', 'api-key'],
   methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
 })
 
