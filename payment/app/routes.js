@@ -1,3 +1,5 @@
+const getPing = require('./handlers/getPingHandler');
+
 const getWallet = require('./handlers/getWalletHandler');
 const getWallets = require('./handlers/getAllWalletsHandler');
 const createWallet = require('./handlers/createWalletHandler');
@@ -13,6 +15,15 @@ const acceptBooking = require('./handlers/acceptBookingHandler');
 const deleteBooking = require('./handlers/deleteBookingHandler');
 const getAllBookings = require('./handlers/getAllBookingsHandler');
 const createIntentBook = require('./handlers/createIntentBookHandler');
+
+function getPingRoute({ controllers, config }) {
+  return {
+    method: 'GET',
+    url: '/ping',
+    schema: getPing.schema(config),
+    handler: getPing.handler({ config, ...controllers })
+  }
+}
 
 function getWalletRoute({ controllers, config }) {
   return {
@@ -134,6 +145,7 @@ function deleteBookingRoute({ controllers, config }) {
 }
 
 module.exports = [
+  getPingRoute,
   getWalletRoute,
   getAllWalletsRoute,
   createWalletRoute,
