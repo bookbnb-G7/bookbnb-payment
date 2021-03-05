@@ -8,7 +8,7 @@ const sqlDateonlyToDate = (sqlDateonly) => {
 }
 
 const toWei = (number) => {
-  const WEIS_IN_ETHER = BigNumber(10).pow(16);
+  const WEIS_IN_ETHER = BigNumber(10).pow(18);
   return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
 };
 
