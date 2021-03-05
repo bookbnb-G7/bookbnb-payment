@@ -241,7 +241,7 @@ describe('Bookings', () => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('price');
-        expect(res.body.price).to.be.eql(0.04);
+        expect(res.body.price).to.be.eql(40);
         expect(res.body).to.have.property('roomId');
         expect(res.body).to.have.property('bookerId');
         expect(res.body).to.have.property('roomOwnerId');
@@ -296,7 +296,7 @@ describe('Bookings', () => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.property('id');
         expect(res.body).to.have.property('price');
-        expect(res.body.price).to.be.eql(0.05);
+        expect(res.body.price).to.be.eql(50);
         expect(res.body).to.have.property('roomId');
         expect(res.body).to.have.property('bookerId');
         expect(res.body).to.have.property('roomOwnerId');
