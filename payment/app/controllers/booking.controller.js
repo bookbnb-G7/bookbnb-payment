@@ -53,7 +53,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
   const targetRoom = await _getRoom(roomId);
 
   const days = daysBetween(dateFrom, dateTo) + 1;
-  const bookingPrice = targetRoom.price * days;
+  const bookingPrice = targetRoom.price * days * 0.001;
 
   return new Promise((resolve, reject) => {
     bookbnbContract['methods'].intentBookingBatch(
