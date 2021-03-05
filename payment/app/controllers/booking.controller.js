@@ -63,7 +63,7 @@ const createIntentBook = ({ config }) => async (web3, bookerId, roomId, dateFrom
     )
     .send({
       from: bookerWallet[0],
-      value: toWei(bookingPrice * 0.001)
+      value: toWei(bookingPrice)
     })
     .on('transactionHash', (hash) => {
       Booking.create({
